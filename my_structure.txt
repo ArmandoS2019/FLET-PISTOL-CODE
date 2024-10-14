@@ -1,0 +1,21 @@
+my_flet_app/
+│
+├─── app.py                # Archivo principal que ejecuta la aplicación
+├─── main.py               # Archivo principal donde se ejecuta Flet
+├─── components/           # Componentes reutilizables de la interfaz de usuario
+│    ├── button.py         # Ejemplo de componente de botón personalizado
+│    ├── sidebar.py        # Ejemplo de componente para la barra lateral
+│    └── navbar.py         # Ejemplo de componente para la barra de navegación
+│
+├─── views/                # Módulos que representan las pantallas de la aplicación
+│    ├── home_view.py      # Vista para la pantalla de inicio
+│    ├── dashboard_view.py # Vista para la pantalla del panel de control
+│    └── settings_view.py  # Vista para la configuración
+│
+├─── services/             # Lógica de negocio o servicios (bases de datos, APIs)
+│    ├── api_service.py    # Conexión y manejo de llamadas a una API
+│    ├── database.py       # Conexión con la base de datos (ej. SQLite, Firebase)
+│    └── utils.py          # Funciones utilitarias o helpers
+│
+└─── assets/               # Archivos estáticos como imágenes o archivos CSS
+     └── logo.png
