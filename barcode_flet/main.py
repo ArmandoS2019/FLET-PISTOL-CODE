@@ -3,8 +3,10 @@ import threading
 import time
 from core.core import MainApp
 
+
+
 def main(page: ft.Page):
-    my_all_flet = MainApp(page)
+    MainApp(page)
     
 
 # Ejecutar la app Flet

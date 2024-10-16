@@ -1,12 +1,11 @@
 import flet as ft
+from login.login import Login
 
-from components.components import BarcodeFrame
-
-class MainApp(BarcodeFrame):
+class MainApp(Login):
     
     def __init__(self, page):
         super().__init__(page)
-        self.page = page
+        
         
         
         

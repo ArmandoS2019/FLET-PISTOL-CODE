@@ -1,0 +1,66 @@
+import flet as ft
+
+# Función para manejar el inicio de sesión
+def login(page: ft.Page):
+    def authenticate_user(e):
+        username = username_field.value
+        password = password_field.value
+        
+        # Validar credenciales (por simplicidad se usa un ejemplo fijo)
+        if username == "admin" and password == "1234":
+            page.session.set("logged_in", True)  # Establecer la sesión como autenticada
+            page.clean()  # Limpiar la página
+            show_dashboard()  # Mostrar el dashboard
+        else:
+            error_message.value = "Usuario o contraseña incorrectos."
+            error_message.update()
+
+    # Campos del formulario de login
+    username_field = ft.TextField(label="Usuario", autofocus=True)
+    password_field = ft.TextField(label="Contraseña", password=True)
+    
+    error_message = ft.Text(color=ft.colors.RED)  # Texto para mensajes de error
+    
+    # Botón de iniciar sesión
+    login_button = ft.ElevatedButton("Iniciar sesión", on_click=authenticate_user)
+    
+    # Agregar el formulario de login a la página
+    page.add(
+        ft.Column(
+            controls=[username_field, password_field, error_message, login_button],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            expand=True,
+        )
+    )
+
+# Función para manejar el cierre de sesión
+def logout(page: ft.Page):
+    page.session.remove("logged_in")  # Eliminar el estado de la sesión
+    page.clean()  # Limpiar la página
+    login(page)  # Volver a mostrar el formulario de login
+
+# Función para mostrar el dashboard (área privada)
+def show_dashboard():
+    welcome_text = ft.Text("Bienvenido al Dashboard", size=30)
+    logout_button = ft.ElevatedButton("Cerrar sesión", on_click=lambda e: logout(page))
+    
+    page.add(
+        ft.Column(
+            controls=[welcome_text, logout_button],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            expand=True,
+        )
+    )
+
+# Función principal de la app
+def main(page: ft.Page):
+    # Verificar si el usuario ya está autenticado
+    if page.session.get("logged_in"):
+        show_dashboard()  # Mostrar el dashboard si ya está logueado
+    else:
+        login(page)  # Mostrar formulario de login si no está autenticado
+
+# Ejecutar la aplicación Flet
+ft.app(target=main)

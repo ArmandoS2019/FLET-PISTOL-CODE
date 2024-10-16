@@ -1,109 +1,63 @@
 import flet as ft
 import time
 
+
 class BarcodeFrame:
     
     def __init__(self, page):
         self.page = page
-        self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-        self.page.title = "Ulti tracking"  
-        self.page.window_favicon = ft.Image(src="assets/ulti.ico")
 
-   
-        my_appbar = self.create_appbar()
         self.barcode_input = ft.TextField(label="Escanea el código de barras aquí", 
                                           prefix_icon=ft.icons.QR_CODE_SCANNER,
                                           hint_text="Esperando lectura de codigo...", 
-                                          on_change=self.on_change,
+                                          on_submit=self.on_submit,
                                           keyboard_type=ft.KeyboardType.TEXT)
+        
         self.resultado_text = ft.Text()
         self.my_card = self.my_card()
         self.data_table = self.data_table()
 
-        my_container = ft.Row(
+        self.barcode_container = ft.Container(
+                                    content=ft.Column(
+                                                controls=[self.barcode_input,
+                                                          self.resultado_text,
+                                                          self.data_table]))
+            
+            
+            
+        self.barcode_container = ft.Row(
             [
             ft.Container(
-                content=ft.Column(controls=[self.barcode_input,self.resultado_text,self.data_table]))],
+                content=ft.Column(controls=
+                                  [self.barcode_input,self.resultado_text,self.data_table]))],
             alignment=ft.MainAxisAlignment.CENTER)
-        self.page.add(my_appbar,my_container)
-        
-     # Función que simula un submit automático después de escribir
-    def on_change(self,e):
-        # Espera 1 segundo después de que el usuario deja de escribir
-        time.sleep(5)
-        self.on_enter(e)  # Llama al evento on_enter automáticamente
-
-    # Función que se llama cuando el usuario presiona ENTER o el submit es automático
-    def on_enter(self,e):
-        self.dlg_modal = self.modal_alert_status()
-        # self.resultado_text.value = f"Has escrito: {self.barcode_input.value}"
-        if self.dlg_modal not in self.page.overlay:
-            self.page.overlay.append(self.dlg_modal)
-            self.dlg_modal.open = True
-        else:
-            self.dlg_modal.open = False
-            self.page.update()
-        self.page.update()
-        return True
-     
+    
+    
     def on_submit(self, e):
         self.dlg_modal = self.modal_alert_status()
         codigo = self.barcode_input.value
-        if codigo == 'hola':
-            if self.dlg_modal not in self.page.overlay:
-                self.page.overlay.append(self.dlg_modal)
+        if codigo == 'a':
+            self.dlg_modal = self.modal_alert_status()
+            self.page.overlay.append(self.dlg_modal)
             self.dlg_modal.open = True
+            self.page.update()
         else:
             self.dlg_modal.open = False
             self.page.update()
-            # Mostramos el código escaneado en la pantalla
-            self.resultado_text.value = f"Código no leído: {codigo}"
             # Limpiar el campo de texto para la siguiente lectura
             self.barcode_input.value = ""
-            
         # Actualizamos la interfaz
         self.page.update()
-        # Limpiar el campo de texto para la siguiente lectura
-        self.barcode_input.value = ""
         return True
     
-    def changed_theme(self, e):
-        # Cambiamos el tema a "light" si está en "dark", y viceversa
-        self.page.theme_mode = "light" if self.page.theme_mode == "dark" else "dark"
-        # Actualizamos la página una sola vez
-        self.page.update()
-        return True
+   
     
-    def create_appbar(self):
-        appbar = ft.AppBar(
-            
-            leading=ft.Image(src="assets/icon.png", width=40, height=40),
-            leading_width=40,
-            title=ft.Text("Ultitracking"),
-            center_title=True,
-            bgcolor=ft.colors.SURFACE_VARIANT,
-            
-            actions=[
-                ft.IconButton(ft.icons.WB_SUNNY_OUTLINED, 
-                              tooltip="Cambiar tema", 
-                              on_click=self.changed_theme),
-                ft.IconButton(ft.icons.FILTER_3),
-                ft.PopupMenuButton(
-                    items=[
-                        ft.PopupMenuItem(text="Item 1"),
-                        ft.PopupMenuItem(),  # Divider
-                        ft.PopupMenuItem(
-                            text="Checked item", checked=False, on_click='self.check_item_clicked'
-                        ),
-                    ]
-                ),
-            ],
-        )
-        return appbar
-
     def handle_close(self,e):
         self.page.close(self.dlg_modal)
-        self.page.add(ft.Text(f"Modal dialog closed with action: {e.control.text}"))
+        self.page.update()
+        self.barcode_input.focus()
+        self.barcode_input.value=''
+        return True
    
     def my_card(self):
         self.mycard = ft.Card(
@@ -141,48 +95,62 @@ class BarcodeFrame:
         modal=True,
         title=ft.Text("Please confirm"),
         content=ft.Text("Do you really want to delete all those files?"),
-        actions=[self.my_card,
-        ],
+        actions=[self.my_card],
         actions_alignment=ft.MainAxisAlignment.CENTER,
-        on_dismiss=lambda e: self.page.add(
-            ft.Text("Modal dialog dismissed"),
-        ),
+        on_dismiss=lambda e: self.page.add(ft.Text("Modal dialog dismissed")),
         )
         return self.dlg_modal
      
     def data_table(self):
-        
         # Función para manejar la selección de un checkbox en una fila
         def checkbox_fila_cambiado(e):
             seleccionadas = [fila.cells[0].content.value for fila in data_table.rows if fila.cells[0].content.value]
             estado_text = f"Filas seleccionadas: {', '.join([str(i) for i in seleccionadas])}"
-            print("===========")
-            print(e)
-            print(estado_text)
-            print("===========")
             self.page.update()
-            
+        
+        def on_button_click(e):
+            selected_row = e.control.data
+            self.page.snack_bar = ft.SnackBar(ft.Text(f"Botón en la fila {selected_row} presionado"))
+            self.page.snack_bar.open = True
+            self.page.update()
+        
         # Datos originales
         data = [
-            {"id": "1", "nombre": "Juan", "edad": "25"},
-            {"id": "2", "nombre": "Ana", "edad": "30"},
-            {"id": "3", "nombre": "Luis", "edad": "40"},
-            {"id": "3", "nombre": "Luis", "edad": "40"},
-            {"id": "3", "nombre": "Luis", "edad": "40"},
-            {"id": "3", "nombre": "Luis", "edad": "40"},
-            {"id": "3", "nombre": "Luis", "edad": "40"},
-            {"id": "3", "nombre": "Luis", "edad": "40"},
-            {"id": "4", "nombre": "Carlos", "edad": "35"}
+            {"id": "counter",
+             "btn": "d", 
+             "check": "1",
+             "nombre": "Juan", 
+             "edad": "25"},
+            {"id": "counter",
+             "btn": "d", 
+             "check": "1",
+             "nombre": "Juan", 
+             "edad": "25"},
+            {"id": "counter",
+             "btn": "d", 
+             "check": "1",
+             "nombre": "Juan", 
+             "edad": "25"},
+            {"id": "counter",
+             "btn": "d", 
+             "check": "1",
+             "nombre": "Juan", 
+             "edad": "25"},
+     
         ]
         rows = [
             ft.DataRow(
                 cells=[
-                    ft.DataCell(ft.Checkbox(on_change=checkbox_fila_cambiado)),
+                    
+                    ft.DataCell(ft.Text(f"{count + 1}")),
+                    ft.DataCell(ft.Text(fila["btn"])),
+                    ft.DataCell(ft.Text(fila["check"])),
                     ft.DataCell(ft.Text(fila["nombre"])),
                     ft.DataCell(ft.Text(fila["edad"]))
-                    ]) for fila in data]
+                    ]) for count,fila in enumerate(data, start=0)]
                 # on_select_changed=lambda e: print(f"row select changed: {e.data}")) for fila in data]
-        
+        # ft.DataCell(ft.ElevatedButton("Acción",on_click=on_button_click)),
+        #             ft.DataCell(ft.Checkbox(on_change=checkbox_fila_cambiado)),
         # Crear la tabla de datos (DataTable)
         data_table = ft.DataTable(
             border=ft.border.all(2, "red"),
@@ -200,6 +168,8 @@ class BarcodeFrame:
             expand=True,    
                 columns=[
                     ft.DataColumn(ft.Text("ID")),
+                    ft.DataColumn(ft.Text("btn")),
+                    ft.DataColumn(ft.Text("check")),
                     ft.DataColumn(ft.Text("Nombre")),
                     ft.DataColumn(ft.Text("Edad"))
                 ],rows=rows)
