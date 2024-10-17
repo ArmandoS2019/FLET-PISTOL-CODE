@@ -6,7 +6,7 @@ class BarcodeFrame:
     
     def __init__(self, page):
         self.page = page
-
+        
         self.barcode_input = ft.TextField(label="Escanea el código de barras aquí", 
                                           prefix_icon=ft.icons.QR_CODE_SCANNER,
                                           hint_text="Esperando lectura de codigo...", 
@@ -17,11 +17,11 @@ class BarcodeFrame:
         self.my_card = self.my_card()
         self.data_table = self.data_table()
 
-        self.barcode_container = ft.Container(
-                                    content=ft.Column(
-                                                controls=[self.barcode_input,
-                                                          self.resultado_text,
-                                                          self.data_table]))
+        # self.barcode_container = ft.Container(
+        #                             content=ft.Column(
+        #                                         controls=[self.barcode_input,
+        #                                                   self.resultado_text,
+        #                                                   self.data_table]))
             
             
             
@@ -50,7 +50,12 @@ class BarcodeFrame:
         self.page.update()
         return True
     
-   
+    
+    def changed_theme(self, e):
+        self.page.theme_mode = ft.ThemeMode.LIGHT if self.page.theme_mode == ft.ThemeMode.DARK else ft.ThemeMode.DARK
+        # Actualizamos la página una sola vez
+        self.page.update()
+        return True
     
     def handle_close(self,e):
         self.page.close(self.dlg_modal)

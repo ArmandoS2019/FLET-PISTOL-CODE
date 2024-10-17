@@ -9,25 +9,28 @@ class AppBar:
         # self.page.appbar = my_appbar 
 
     def create_appbar(self):
-        self.btn_logout = ft.IconButton(ft.icons.LOGOUT,tooltip="Cerrar sesión", visible=False)  
+        
+        btn_config = ft.PopupMenuButton(visible=True,
+            items=[ft.PopupMenuItem(text='Cambiar modo',icon=ft.icons.WB_SUNNY_OUTLINED,on_click=self.changed_theme),
+                   ft.PopupMenuItem(),
+                   ft.PopupMenuItem(text='Editar perfil',icon=ft.icons.PERSON_2_ROUNDED, on_click=self.logout),
+                   ft.PopupMenuItem(),
+                   ft.PopupMenuItem(text='Cerrar sesión',icon=ft.icons.LOGOUT, on_click=self.logout)])
+        
+        row1 = ft.Row(controls=[ft.CircleAvatar(width=30, height=30,
+                    foreground_image_src="https://avatars.githubusercontent.com/u/5041459?s=88&v=4"),
+                    ft.Text('Armando.S.'),btn_config])
+            
+        self.btn_menu_profile = ft.Container(content=ft.Column(controls=[row1],
+                                                               alignment=ft.MainAxisAlignment.CENTER))
+
+        
         appbar = ft.AppBar(
-            leading=ft.Image(src="assets/icon.png", width=50, height=50),
+            leading=ft.Image(src="assets/icon.png", width=50, height=50),leading_width=40,
             title=ft.Text("Ultitracking"),
             center_title=True,
             bgcolor=ft.colors.SURFACE_VARIANT,
-            
-            actions=[
-                ft.IconButton(ft.icons.WB_SUNNY_OUTLINED, 
-                              tooltip="Cambiar tema", 
-                              on_click=self.changed_theme),
-                self.btn_logout
-                    ]
-                            )
+            actions=[self.btn_menu_profile])
         return appbar
     
-    def changed_theme(self, e):
-        # Cambiamos el tema a "light" si está en "dark", y viceversa
-        self.page.theme_mode = "light" if self.page.theme_mode == "dark" else "dark"
-        # Actualizamos la página una sola vez
-        self.page.update()
-        return True
+    
