@@ -1,12 +1,12 @@
 import flet as ft
 import threading
 import time
-from core.core import MainApp
+from login.login import Login
 
 
 
 def main(page: ft.Page):
-    MainApp(page)
+    Login(page)
     
 
 # Ejecutar la app Flet
