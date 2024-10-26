@@ -12,7 +12,7 @@ class MyReport:
     
     def get_image_report(self, my_list_items):
         width = 463  # Ancho en píxeles
-        height = 1417  # Largo en píxeles (7 pulgadas como ejemplo)
+        height = 980  # Largo en píxeles (7 pulgadas como ejemplo)
         self.receive_image = Image.new('RGB', (width, height), (255, 255, 255)).convert("RGBA")
         self.draw = ImageDraw.Draw(self.receive_image)
         self.current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -64,9 +64,7 @@ class MyReport:
         self.draw.text((x, y+100), f"* * * * * * * * * * * * * * * * * * * *  * *  * *  * *", fill="black", font=regular_font)
         self.draw.text((x, y+114), f'''Av. Leopoldo Navarro 402,Santo Domingo 
         10203 Teléfono: (809) 682-2151''', fill="black", font=regular_font2, align='left')
-        # self.receive_image.show()
-        
-         # Crear un buffer en memoria
+        # Crear un buffer en memoria
         buffered = io.BytesIO()
         # Guardar la imagen en el buffer como PNG
         self.receive_image.save(buffered, format="PNG")

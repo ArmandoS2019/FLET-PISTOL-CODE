@@ -6,6 +6,10 @@ class MyComponents(ft.Page):
     def __init__(self, page):
         self.page = page
     
+    def btn_send_report_whatsapp(self,e):
+        self.page.launch_url("https://wa.me/18293871165")
+        return True
+       
     def btn_cupertino_status(self):
         self.btn_cupertino_status = ft.CupertinoSlidingSegmentedButton(
             thumb_color=self.page.theme.color_scheme.tertiary,
@@ -45,6 +49,14 @@ class MyComponents(ft.Page):
     
     def handle_close(self,e):
         self.page.close(self.dlg_modal)
+        self.page.update()
+        self.barcode_input.focus()
+        self.barcode_input.value=''
+        return True
+    
+    def handle_close_modal_report(self,e):
+        # self.my_modal_show_report.open = False
+        self.page.close(self.my_modal_show_report)
         self.page.update()
         self.barcode_input.focus()
         self.barcode_input.value=''

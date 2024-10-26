@@ -6,9 +6,7 @@ class BarcodeFrame:
     def __init__(self, page):
         self.page = page
         
-        
-        
-            # Definir un diccionario con los atributos comunes
+        # Definir un diccionario con los atributos comunes
         self.common_attributes = {
             "expand": True,
             "border_radius": 10
@@ -58,6 +56,16 @@ class BarcodeFrame:
                                         )
                                     ]
                                 )          
+        
+        self.column_whatsapp_center = ft.Column(
+                                    expand=True,
+                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                    alignment=ft.MainAxisAlignment.START,  # Alinear en la parte superior
+                                    controls=[ft.ElevatedButton(text='WhatsApp',
+                                                                        on_click=self.btn_send_report_whatsapp,
+                                                                        icon=ft.icons.SEND_AND_ARCHIVE_ROUNDED)
+                                    ]
+                                )          
                                                                         
         self.column_report_right = ft.Column(
                                     expand=True,
@@ -69,12 +77,16 @@ class BarcodeFrame:
                                             expand=False,
                                             margin=10,
                                             border_radius=5,
-                                            content=ft.Text("Genere un recibo o reporte"),
+                                            content=ft.Text("Imprima un recibo o envilo por WhatsApp"),
                                         ),
                                         ft.Container(
-                                            content=ft.ElevatedButton(text='PDF', 
+                                            content=ft.Row(
+                                            [
+                                                ft.ElevatedButton(text='PDF', 
                                                                       on_click=self.verify_check_true_datatable,
-                                                                      icon=ft.icons.PICTURE_AS_PDF_ROUNDED),  # Segundo contenedor con un botón u otro contenido
+                                                                      icon=ft.icons.PICTURE_AS_PDF_ROUNDED),
+                                                
+                                            ]),  # Segundo contenedor con un botón u otro contenido
                                             padding=20,
                                             margin=10,
                                             border_radius=10,
@@ -86,14 +98,18 @@ class BarcodeFrame:
         self.container_status = ft.Container(**self.common_attributes, bgcolor=self.page.theme.color_scheme.primary_container,
                                             content=self.column_status_left)
 
-        self.container_report = ft.Container(**self.common_attributes, bgcolor=self.page.theme.color_scheme.primary_container,content=self.column_report_right)
+        self.container_report = ft.Container(**self.common_attributes, bgcolor=self.page.theme.color_scheme.primary_container,
+                                             content=self.column_report_right)
+            
+        self.container_whatsapp_report = ft.Container(**self.common_attributes, bgcolor=self.page.theme.color_scheme.primary_container,
+                                             content=self.column_whatsapp_center)
             
             
         self.frame_stadistic = ft.Container(bgcolor=self.page.theme.color_scheme.primary_container,
                                             **self.common_attributes)
         
         
-        self.two_container = ft.Row(controls=[self.container_status,self.container_report])
+        self.two_container = ft.Row(controls=[self.container_status,self.container_report,self.container_whatsapp_report])
         
         self.barcode_container = ft.Row(
             expand=True,

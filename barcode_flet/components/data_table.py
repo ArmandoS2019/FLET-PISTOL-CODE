@@ -20,7 +20,19 @@ class MyDataTable:
         for row in self.my_data_table.rows:
             row.selected = False
         
-        self.page.add(ft.Image(src_base64=self.my_image_report))
+        
+        my_image_report = ft.Image(src_base64=self.my_image_report,
+                               tooltip='Imprima su reporte',
+                               filter_quality=ft.FilterQuality.LOW, 
+                               width=300, 
+                               height=None, 
+                               fit=ft.ImageFit.CONTAIN,
+                               border_radius=ft.border_radius.all(30))
+        self.my_modal_show_report = self.modal_show_report(my_image_report)
+        self.page.overlay.append(self.my_modal_show_report)
+        self.my_modal_show_report.open = True
+            
+        # self.page.add()
         # Actualizar la página para reflejar los cambios
         self.page.update()
         
