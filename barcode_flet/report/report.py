@@ -1,6 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
-
+import flet as ft
+import io
+import base64
 
 
 class MyReport:
@@ -34,7 +36,6 @@ class MyReport:
         self.center_x = (width - logo_width) // 2
         self.top_y = 10  # Espacio desde la parte superior
 
-        
         self.draw.text((50, 110), "P O L I C I A   N A C I O N A L", fill="black", font=title_font)
         self.draw.text((50, 140), "****   RECEPCION DE EXPEDIENTES   ****", spacing=12, align="right", fill="black", font=regular_font)
         self.draw.text((50, 170), "* * * * * * * * * * * * * * * * * * * *  * *  * *  * *", fill="black", font=regular_font)
@@ -63,5 +64,15 @@ class MyReport:
         self.draw.text((x, y+100), f"* * * * * * * * * * * * * * * * * * * *  * *  * *  * *", fill="black", font=regular_font)
         self.draw.text((x, y+114), f'''Av. Leopoldo Navarro 402,Santo Domingo 
         10203 Teléfono: (809) 682-2151''', fill="black", font=regular_font2, align='left')
-        self.receive_image.show()
+        # self.receive_image.show()
+        
+         # Crear un buffer en memoria
+        buffered = io.BytesIO()
+        # Guardar la imagen en el buffer como PNG
+        self.receive_image.save(buffered, format="PNG")
+        # Obtener los datos binarios del buffer
+        img_data = buffered.getvalue()
+        # Codificar en base64 y decodificar para obtener una cadena de texto
+        img_str = base64.b64encode(img_data).decode("utf-8")
+        return img_str
 

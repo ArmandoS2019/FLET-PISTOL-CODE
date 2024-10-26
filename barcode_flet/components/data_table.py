@@ -7,13 +7,23 @@ class MyDataTable:
         self.page = page
 
     def verify_check_true_datatable(self, e):
-        selected_data = []
+        # Recopilar datos seleccionados
+        selected_data = [
+            row.cells[1].content.value  # Se obtiene el valor de la segunda celda
+            for row in self.my_data_table.rows if row.selected is True
+        ]
+        
+        # Procesar los datos seleccionados
+        self.my_image_report = self.get_image_report(selected_data)
+        
+        # Deseleccionar todas las filas después de la operación
         for row in self.my_data_table.rows:
-            if row.selected==True:
-                selected_data.append(row.cells[1].content.value)
-                # print(row.cells[2].content.value)
-        # print(selected_data) 
-        self.get_image_report(selected_data) 
+            row.selected = False
+        
+        self.page.add(ft.Image(src_base64=self.my_image_report))
+        # Actualizar la página para reflejar los cambios
+        self.page.update()
+        
         return True
     
     def on_selection_change(self,e):
@@ -42,7 +52,7 @@ class MyDataTable:
                 ft.DataCell(ft.Text(documento.get("state", ""))),
                 ft.DataCell(ft.Text(documento.get("date", ""))),
                 ft.DataCell(ft.Text(documento.get("updated_date", ""))),],
-            on_select_changed=self.on_selection_change, data=num) for num, documento in enumerate(resultados, start=1) ]
+            on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
         
         # Obtener los datos actualizados de MongoDB
         nuevos_datos = my_rows
@@ -77,7 +87,6 @@ class MyDataTable:
 
         # Crear la tabla de datos (DataTable)
         self.my_data_table = ft.DataTable(show_checkbox_column=True,
-                                            on_select_all=False,
                                             width=380,
                                             heading_row_height=40,
                                             data_row_max_height=40,
