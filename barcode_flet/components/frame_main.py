@@ -73,6 +73,7 @@ class BarcodeFrame:
                                         ),
                                         ft.Container(
                                             content=ft.ElevatedButton(text='PDF', 
+                                                                      on_click=self.verify_check_true_datatable,
                                                                       icon=ft.icons.PICTURE_AS_PDF_ROUNDED),  # Segundo contenedor con un botón u otro contenido
                                             padding=20,
                                             margin=10,

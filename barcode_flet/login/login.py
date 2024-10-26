@@ -2,14 +2,15 @@ import time
 import flet as ft
 from components import (MyAppBar, MyCard, MyComponents, MyDataTable, 
                         BarcodeFrame, MyModal, MySnackBar, MyTheme)
+from report import MyReport
 
-
-class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyDataTable, MySnackBar,MyModal,MyCard):
+class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, MySnackBar,MyModal,MyCard):
     
     def __init__(self, page):
         MyTheme.__init__(self,page)
         BarcodeFrame.__init__(self,page)
-
+        MyReport.__init__(self)
+        
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.title = "Login"  
         self.page.window_favicon = ft.Image(src="assets/ulti.ico")

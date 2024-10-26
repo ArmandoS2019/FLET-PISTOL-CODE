@@ -6,6 +6,10 @@ class MyComponents(ft.Page):
     def __init__(self, page):
         self.page = page
     
+    def open_pdf(self, e):
+        print('hola')
+        self.page.launch_url(r'C:/Users/arman/Documents/Python Project 2024/FLET PISTOL CODE/pdf/aesblinkreport.pdf')
+
     def btn_cupertino_status(self):
         self.btn_cupertino_status = ft.CupertinoSlidingSegmentedButton(
             thumb_color=self.page.theme.color_scheme.tertiary,
@@ -13,7 +17,7 @@ class MyComponents(ft.Page):
             on_change=lambda e: print(f"selected_index: {e.data}"),
             padding=ft.padding.symmetric(0, 10),
             controls=[
-                ft.Text("RECIBIR", color=ft.colors.BLUE),
+                ft.Text("RECIBIR"),
                 ft.Text("DESPACHAR"),
             ])
         return self.btn_cupertino_status    

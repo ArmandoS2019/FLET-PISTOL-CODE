@@ -6,11 +6,21 @@ class MyDataTable:
     def __init__(self, page):
         self.page = page
 
+    def verify_check_true_datatable(self, e):
+        selected_data = []
+        for row in self.my_data_table.rows:
+            if row.selected==True:
+                selected_data.append(row.cells[1].content.value)
+                # print(row.cells[2].content.value)
+        # print(selected_data) 
+        self.get_image_report(selected_data) 
+        return True
+    
     def on_selection_change(self,e):
         e.control.selected = not e.control.selected  # Alternar entre seleccionado y no seleccionado
-        e.page.update()
+        e.page.update()  
         return True
-        
+
     def insert_data_to_montodb(self):
         my_data = {'user_id':655,
                    'status_code':'Recibido en el archivo insp.',
@@ -32,7 +42,7 @@ class MyDataTable:
                 ft.DataCell(ft.Text(documento.get("state", ""))),
                 ft.DataCell(ft.Text(documento.get("date", ""))),
                 ft.DataCell(ft.Text(documento.get("updated_date", ""))),],
-            on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
+            on_select_changed=self.on_selection_change, data=num) for num, documento in enumerate(resultados, start=1) ]
         
         # Obtener los datos actualizados de MongoDB
         nuevos_datos = my_rows
