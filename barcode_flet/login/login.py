@@ -1,10 +1,10 @@
 import time
 import flet as ft
 from components import (MyAppBar, MyCard, MyComponents, MyDataTable, 
-                        BarcodeFrame, MyModal, MySnackBar, MyTheme)
+                        BarcodeFrame, MyModal, MySnackBar, MyTheme,MyNavigationRail)
 from report import MyReport
 
-class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, MySnackBar,MyModal,MyCard):
+class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, MySnackBar,MyModal,MyCard,MyNavigationRail):
     
     def __init__(self, page):
         MyTheme.__init__(self,page)
@@ -16,18 +16,21 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         self.page.window_favicon = ft.Image(src="assets/ulti.ico")
         # self.page.theme_mode = ft.ThemeMode.DARK
         self.page.appbar = self.create_appbar()
-        # self.page.clean()
-        self.page.add(self.barcode_container)
+        self.page.clean()
+        self.page.add(self.barcode_container) # FOR TEST
         self.btn_menu_profile.visible = True #this to be FALSE for test 
-        # self.my_login()
+        # self.page.on_login = self.my_login()
         
     def my_login(self):
+        
         def authenticate_user(e):
             username = username_field.value
             password = password_field.value
             # Validar credenciales (por simplicidad se usa un ejemplo fijo)
             if username == "a" and password == "1":
-                self.page.session.set("logged_in", True)  # Establecer la sesión como autenticada
+                self.page.session.set(username, True)  # Establecer la sesión como autenticada
+                self.page.client_storage.set("username", username)
+                
                 self.page.clean()  # Limpiar la página
                 self.btn_menu_profile.visible = True #If you are logged in INVISIBLE TRUE, else FALSE 
                 username_field.value = ""
@@ -45,15 +48,17 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
                                       can_reveal_password=True)
         
         error_message = ft.Text(color=self.page.theme.color_scheme.on_error)  # Texto para mensajes de error
-        
+       
         # Botón de iniciar sesión
-        login_button = ft.ElevatedButton("Iniciar sesión", on_click=authenticate_user)
+        login_button = ft.ElevatedButton("Iniciar sesión",
+                                         icon=ft.icons.LOGIN, 
+                                         on_click=authenticate_user)
         
         # Agregar el formulario de login a la página
         self.login_container=ft.Container(ft.Column(
                                         controls=[username_field, password_field, error_message, login_button],
                                         alignment=ft.MainAxisAlignment.CENTER,
-                                        spacing=20,
+                                        spacing=5,
                                         horizontal_alignment=ft.CrossAxisAlignment.CENTER),
                             padding=50,
                             border_radius=10,  
@@ -67,5 +72,6 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
     def logout(self, e):
         self.btn_menu_profile.visible = False
         self.page.clean() 
+        self.page.session.remove(self.page.client_storage.get("username"))
         self.page.add(ft.Container(content=self.login_container, alignment=ft.alignment.center, expand=True))
         

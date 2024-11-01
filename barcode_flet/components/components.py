@@ -5,21 +5,37 @@ class MyComponents(ft.Page):
     
     def __init__(self, page):
         self.page = page
+        
+    def send_save_image_report(self,e):
+        self.my_current_user = self.page.client_storage.get("username").lower()
+        self.page.launch_url(f'images/download_image/{self.my_current_user}.png')
+        return True
     
     def btn_send_report_whatsapp(self,e):
-        self.page.launch_url("https://wa.me/18293871165")
+        # Image URL (hosted online) to send
+        # image_url = "https://example.com/path/to/your/image.jpg"
+        phone_number = "18293871165"
+        
+        # WhatsApp link with message text including the image URL
+        # whatsapp_link = f"https://wa.me/{phone_number}?text=Check out this image: {image_url}"
+    
+        self.page.launch_url(f"https://wa.me/18293871165?text=Hello%20from%20FastAPI!")
         return True
        
     def btn_cupertino_status(self):
-        self.btn_cupertino_status = ft.CupertinoSlidingSegmentedButton(
-            thumb_color=self.page.theme.color_scheme.tertiary,
-            selected_index=1,  # Color del thumb (círculo)
-            on_change=lambda e: print(f"selected_index: {e.data}"),
-            padding=ft.padding.symmetric(0, 10),
-            controls=[
-                ft.Text("RECIBIR"),
-                ft.Text("DESPACHAR"),
-            ])
+        self.btn_cupertino_status = ft.CupertinoNavigationBar(
+        bgcolor=self.page.theme.color_scheme.primary_container,
+        inactive_color=ft.colors.GREY,
+        active_color=ft.colors.YELLOW_ACCENT_700,
+        on_change=lambda e: print("Selected tab:", e.control.selected_index),
+            destinations=[
+                ft.NavigationBarDestination(icon=ft.icons.MOVE_TO_INBOX,
+                                            selected_icon=ft.icons.MOVE_TO_INBOX, 
+                                            label="RECIBIR"),
+                ft.NavigationBarDestination(icon=ft.icons.ARROW_FORWARD, 
+                                            label="DESPACHAR"),
+            ]
+        )
         return self.btn_cupertino_status    
     
     def on_submit_modal_status(self, e):

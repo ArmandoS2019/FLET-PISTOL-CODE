@@ -4,7 +4,7 @@ import flet as ft
 class MyAppBar:
 
     def __init__(self, page):
-        self.page = page
+        self.page = page 
 
     def create_appbar(self):
         self.btn_popup_change_theme = ft.PopupMenuItem(text='Cambiar modo',
@@ -24,7 +24,7 @@ class MyAppBar:
         
         row1 = ft.Row(controls=[ft.CircleAvatar(width=30, height=30,
                     foreground_image_src="https://avatars.githubusercontent.com/u/5041459?s=88&v=4"),
-                    ft.Text('Armando.S.'),btn_config])
+                    ft.Text(value=self.page.client_storage.get("username")),btn_config])
             
         self.btn_menu_profile = ft.Container(content=ft.Column(controls=[row1],
                                                                alignment=ft.MainAxisAlignment.CENTER))

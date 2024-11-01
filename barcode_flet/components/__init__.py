@@ -6,3 +6,4 @@ from .frame_main import BarcodeFrame
 from .modal import MyModal
 from .snack_bar import MySnackBar
 from .my_theme import MyTheme
+from .navigation_rail import MyNavigationRail

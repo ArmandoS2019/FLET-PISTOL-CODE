@@ -8,7 +8,8 @@ class MySnackBar:
     def snackbar_success(self,e):
         self.handle_close(e)
         self.insert_data_to_montodb() 
-               
+        self.my_current_user = self.page.client_storage.get("username")
+      
         btn_snackbars=ft.Row(
             controls=[
                 ft.Icon(ft.icons.CHECK_CIRCLE_OUTLINED, color=self.page.theme.color_scheme.secondary, size=24),  # Ícono de éxito
@@ -20,7 +21,7 @@ class MySnackBar:
                                 show_close_icon=True,
                                 content=ft.Row([
                                                 ft.Icon(name=ft.icons.CHECK_CIRCLE, color=ft.colors.WHITE),  # Ícono de información
-                                                ft.Text("Recibido exitosamente!")
+                                                ft.Text(f"Recibido exitosamente por {self.my_current_user}!")
                                             ]),
                                 bgcolor=self.page.theme.color_scheme.on_tertiary,
                                 shape=ft.RoundedRectangleBorder(radius=10), 

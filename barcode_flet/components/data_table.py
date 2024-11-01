@@ -14,12 +14,12 @@ class MyDataTable:
         ]
         
         # Procesar los datos seleccionados
-        self.my_image_report = self.get_image_report(selected_data)
+        self.my_current_user = self.page.client_storage.get("username").lower()
+        self.my_image_report = self.get_image_report(selected_data, self.my_current_user)
         
         # Deseleccionar todas las filas después de la operación
         for row in self.my_data_table.rows:
             row.selected = False
-        
         
         my_image_report = ft.Image(src_base64=self.my_image_report,
                                tooltip='Imprima su reporte',
@@ -28,14 +28,11 @@ class MyDataTable:
                                height=None, 
                                fit=ft.ImageFit.CONTAIN,
                                border_radius=ft.border_radius.all(30))
+        
         self.my_modal_show_report = self.modal_show_report(my_image_report)
         self.page.overlay.append(self.my_modal_show_report)
         self.my_modal_show_report.open = True
-            
-        # self.page.add()
-        # Actualizar la página para reflejar los cambios
         self.page.update()
-        
         return True
     
     def on_selection_change(self,e):
@@ -98,26 +95,21 @@ class MyDataTable:
             on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
 
         # Crear la tabla de datos (DataTable)
-        self.my_data_table = ft.DataTable(show_checkbox_column=True,
-                                            width=380,
-                                            heading_row_height=40,
-                                            data_row_max_height=40,
+        self.my_data_table = ft.DataTable(expand=True,show_checkbox_column=True,
+                                            heading_row_height=30,
+                                            data_row_max_height=30,
                                             columns=my_column,
                                             rows=my_rows)
         
         data_table_container = ft.Container(expand=True,
-                                            width=600,
-                                            padding=10,
                                             border_radius=ft.border_radius.only(top_left=10,top_right=10),
                                             shadow=ft.BoxShadow(spread_radius=8,
                                                                 blur_radius=15,
                                                                 color=ft.colors.with_opacity(0.15,'black')),
                                             bgcolor=self.page.theme.color_scheme.primary_container,
-                                            content=ft.Column(controls=[self.my_data_table],
+                                            content=ft.Row(controls=[ft.Column(controls=[self.my_data_table],
                                                                 auto_scroll=False, 
-                                                                scroll=ft.ScrollMode.ALWAYS,
-                                                                height=800)
+                                                                scroll=ft.ScrollMode.ALWAYS)],
+                                                           scroll=ft.ScrollMode.ALWAYS)
                                             )
-        # # ,
-        
         return data_table_container

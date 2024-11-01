@@ -1,0 +1,8 @@
+#run my app reload
+
+uvicorn main:app          #normal
+uvicorn main:app --reload #auto_change server
+uvicorn main:app --reload #auto_change server
+uvicorn main:app --port 5000 --reload #auto_change server and change port
+uvicorn main:app --host 0.0.0.0 --port 5000 --reload #auto_change server and change port AND all your INTERNET
+

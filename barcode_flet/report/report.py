@@ -3,6 +3,7 @@ from datetime import datetime
 import flet as ft
 import io
 import base64
+from fastapi.responses import JSONResponse
 
 
 class MyReport:
@@ -10,7 +11,7 @@ class MyReport:
     def __init__(self):
         pass
     
-    def get_image_report(self, my_list_items):
+    def get_image_report(self, my_list_items, username_filename):
         width = 463  # Ancho en píxeles
         height = 980  # Largo en píxeles (7 pulgadas como ejemplo)
         self.receive_image = Image.new('RGB', (width, height), (255, 255, 255)).convert("RGBA")
@@ -54,9 +55,7 @@ class MyReport:
             self.draw.text((x, y), f"{num} - {dat}", fill="black", font=regular_font)
             y += line_spacing  # Incrementar la posición Y para el siguiente texto
            
-        
         self.receive_image.paste(self.logo, (self.center_x, self.top_y), self.logo)  # Cambia las coordenadas según la posición deseada
-        # self.receive_image.save('imagen_ejemplo.png')
         # Mostrar la imagen (opcional, si estás en un entorno local)
         self.draw.text((x, y), f"Total: {len(my_list_items)}", fill="black", font=title_font2)
         self.draw.text((x, y+15), f"----------------------", fill="black", font=regular_font)
@@ -72,5 +71,11 @@ class MyReport:
         img_data = buffered.getvalue()
         # Codificar en base64 y decodificar para obtener una cadena de texto
         img_str = base64.b64encode(img_data).decode("utf-8")
+        
+        #!save image after OPEN VIEW MODAL report
+        self.receive_image.save(f'assets/image_report/{username_filename}.png')
+        
         return img_str
-
+    
+        
+                         

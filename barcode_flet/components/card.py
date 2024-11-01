@@ -23,7 +23,7 @@ class MyCard:
                                 icon=ft.icons.CHECK_CIRCLE,
                                 icon_color=self.page.theme.color_scheme.secondary, 
                                 style=ft.ButtonStyle(color=self.page.theme.color_scheme.secondary)), 
-                             ft.TextButton("Rechazar", on_click=self.handle_close, 
+                             ft.TextButton("Cerrar", on_click=self.handle_close, 
                                 icon=ft.icons.CANCEL,  
                                 icon_color=self.page.theme.color_scheme.on_error,
                                 style=ft.ButtonStyle(color=self.page.theme.color_scheme.on_error))],
