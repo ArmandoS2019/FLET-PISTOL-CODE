@@ -7,8 +7,8 @@ router_data = APIRouter()
 @router_data.get("/get_data/")
 async def get_data():
     try:
-        # Obtiene todos los documentos de la colección
         items = list(collection.find().limit(50))
+        # Obtiene todos los documentos de la colección
         # Convierte ObjectId a string para que sea serializable en JSON
         for item in items:
             item["_id"] = str(item["_id"])

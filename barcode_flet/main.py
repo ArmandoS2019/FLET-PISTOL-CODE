@@ -34,5 +34,5 @@ app.include_router(router_data,
 
 
 app.mount("/",flet_fastapi.app(main, 
-                            assets_dir='assets',
+                            assets_dir='/assets',
                             web_renderer=ft.WebRenderer.CANVAS_KIT))

@@ -10,23 +10,27 @@ class MyComponents(ft.Page):
         
     def send_save_image_report(self,e):
         self.my_current_user = self.page.client_storage.get("username").lower()
-        # self.page.launch_url(f'images/download_image/{self.my_current_user}.png')
-        # self.page.launch_url(f'get_data/')
-        try:
-            response = requests.get(f'{BASE_URL}/get_data/')
-            if response.status_code == 200:
-                data = response.json()
-                print(data['items'])
-            else:
-                print(f"Error: {response.status_code}")
-        except requests.RequestException as e:
-            print(f"Error de solicitud: {e}") 
+        self.page.launch_url(f'images/download_image/{self.my_current_user}.png')
+        self.page.launch_url(f'get_data/')
+        # try:
+        #     response = requests.get(f'{BASE_URL}/get_data/')
+        #     if response.status_code == 200:
+        #         data = response.json()
+        #         print(data['items'])
+        #     else:
+        #         print(f"Error: {response.status_code}")
+        # except requests.RequestException as e:
+        #     print(f"Error de solicitud: {e}") 
              
         return True
     
     def btn_send_report_whatsapp(self,e):
-        phone_number = "18293871165"
-        self.page.launch_url(f"https://wa.me/18293871165?text=Hello%20from%20FastAPI!")
+        phone_number="18293871165"
+        message="Enviar WhatsApp",
+        self.page.launch_url(f"https://wa.me/{phone_number}?text={message}")
+        
+        # phone_number = "18293871165"
+        # self.page.launch_url(f"https://wa.me/18293871165?text=Hello%20from%20FastAPI!")
         return True
        
     def btn_cupertino_status(self):

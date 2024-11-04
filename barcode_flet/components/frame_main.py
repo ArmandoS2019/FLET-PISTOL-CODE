@@ -1,6 +1,7 @@
 import flet as ft
 import time
-
+from db.my_mongodb import collection
+from components.data_table import DataTableApp
 class BarcodeFrame:
     
     def __init__(self, page):
@@ -13,7 +14,7 @@ class BarcodeFrame:
             'padding':2,
             "bgcolor":self.page.theme.color_scheme.secondary,
             }   
-            
+        
         self.barcode_input = ft.TextField(label="Escanea el código de barras aquí",
                                           prefix_icon=ft.icons.QR_CODE_SCANNER,
                                           hint_text="Esperando lectura de codigo...", 
@@ -61,6 +62,5 @@ class BarcodeFrame:
                                     self.two_container_2])
             ]
         )
-                                                     
         return self.barcode_container
                 

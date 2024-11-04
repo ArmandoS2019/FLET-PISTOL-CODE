@@ -3,11 +3,12 @@ from db.my_mongodb import collection
 import requests
 from config.config import BASE_URL  # Import BASE_URL from config.py
 
+
 class MyDataTable:
 
     def __init__(self, page):
         self.page = page
-
+      
     def verify_check_true_datatable(self, e):
         # Recopilar datos seleccionados
         selected_data = [
@@ -66,16 +67,42 @@ class MyDataTable:
                 ft.DataCell(ft.Text(documento.get("updated_date", ""))),],
             on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
         
-        # Obtener los datos actualizados de MongoDB
+        # # Obtener los datos actualizados de MongoDB
         nuevos_datos = my_rows
-        # Actualizar las filas del DataTable con los nuevos datos
+        # # Actualizar las filas del DataTable con los nuevos datos
         self.my_data_table.rows = nuevos_datos
-        # Refrescar la página para mostrar los cambios
+        # # Refrescar la página para mostrar los cambios
         self.page.update()
         return True
-     
+       
+    def get_data_from_api(self):
+        try:
+            # Realiza la solicitud GET
+            response = requests.get(f"{BASE_URL}/get_data/")
+            if response.status_code == 200:
+                results = response.json()
+                # Construir filas para el DataTable
+                my_rows = [
+                    ft.DataRow(
+                        cells=[
+                            ft.DataCell(ft.Text(str(num))),
+                            ft.DataCell(ft.Text(item["user_id"])),
+                            ft.DataCell(ft.Text(item["status_code"])),
+                            ft.DataCell(ft.Text(item["state"])),
+                            ft.DataCell(ft.Text(item["date"])),
+                            ft.DataCell(ft.Text(item["updated_date"])),
+                        ],
+                        on_select_changed=self.on_selection_change
+                    ) for num, item in enumerate(results['items'], start=1)
+                ]
+                return my_rows
+            else:
+                print(f"Error al obtener datos: {response.status_code}")
+        except requests.RequestException as e:
+            print(f"Error de solicitud: {e}")
+    
     def data_table(self):
-        
+        my_rows = self.get_data_from_api()
         my_column = [ft.DataColumn(ft.Text("#")),
                     ft.DataColumn(ft.Text("Column 1"),on_sort=lambda e: print(f"{e.column_index}, {e.ascending}")),
                     ft.DataColumn(ft.Text("Column 2")),
@@ -83,36 +110,8 @@ class MyDataTable:
                     ft.DataColumn(ft.Text("Column 4")),
                     ft.DataColumn(ft.Text("Column 5"))
                     ]
-
-        
-        try:
-            response = requests.get(f'{BASE_URL}/get_data/')
-            if response.status_code == 200:
-                data = response.json()
-                items = data['items']
-                # Construye las filas para el DataTable a partir de los datos
-                my_rows = [
-                    ft.DataRow(
-                        cells=[
-                            ft.DataCell(ft.Text(str(num))),
-                            ft.DataCell(ft.Text(str(documento.get("user_id", "")))),
-                            ft.DataCell(ft.Text(documento.get("status_code", ""))),
-                            ft.DataCell(ft.Text(documento.get("state", ""))),
-                            ft.DataCell(ft.Text(documento.get("date", ""))),
-                            ft.DataCell(ft.Text(documento.get("updated_date", ""))),
-                        ],
-                        on_select_changed=self.on_selection_change
-                    ) for num, documento in enumerate(items, start=1)
-                ]
-                
-        except requests.RequestException as e:
-            print(f"Error de solicitud: {e}")
-        
-        
-        
-        # Crear filas dinámicas desde los resultados de MongoDB
-        # resultados = collection.find().limit(50)
-
+        # #Crear filas dinámicas desde los resultados de MongoDB
+        # resultados = collection.find().limit(50) 
         # my_rows = [ft.DataRow(
         #     cells=[
         #         ft.DataCell(ft.Text(str(num))),
@@ -123,7 +122,8 @@ class MyDataTable:
         #         ft.DataCell(ft.Text(documento.get("updated_date", ""))),
         #     ],
         #     on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
-        print(my_rows)
+        
+        
         # Crear la tabla de datos (DataTable)
         self.my_data_table = ft.DataTable(expand=True,
                                           show_checkbox_column=True,
@@ -143,17 +143,57 @@ class MyDataTable:
                                                 weight=ft.FontWeight.BOLD),
                                           border=ft.BorderSide(color=ft.colors.RED, width=10)
                                           )
-        
 
         data_table_container = ft.Container(expand=True,
                                             border_radius=ft.border_radius.only(top_left=10,top_right=10),
                                             shadow=ft.BoxShadow(spread_radius=8,
                                                                 blur_radius=15,
                                                                 color=ft.colors.with_opacity(0.15,'black')),
-                                            bgcolor=self.page.theme.color_scheme.secondary_container,
+                                            bgcolor=self.page.   theme.color_scheme.secondary_container,
                                             content=ft.Row(controls=[ft.Column(controls=[self.my_data_table],
                                                                                auto_scroll=False, 
                                                                                scroll=ft.ScrollMode.ALWAYS)],
                                                            scroll=ft.ScrollMode.ALWAYS)
                                             )
+        
         return data_table_container
+    
+class DataTableApp(ft.UserControl):
+    def build(self):
+        
+        # Realiza la solicitud GET
+        response = requests.get(f"{BASE_URL}/get_data/")
+        if response.status_code == 200:
+            results = response.json()
+            # Construir filas para el DataTable
+            rows = [
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(ft.Text(str(num))),
+                        ft.DataCell(ft.Text(item["user_id"])),
+                        ft.DataCell(ft.Text(item["status_code"])),
+                        ft.DataCell(ft.Text(item["state"])),
+                        ft.DataCell(ft.Text(item["date"])),
+                        ft.DataCell(ft.Text(item["updated_date"])),
+                    ],
+                    on_select_changed=self.on_selection_change
+                ) for num, item in enumerate(results['items'], start=1)
+            ]
+        # Crear el DataTable vacío
+        self.data_table = ft.DataTable(
+            columns=[
+                ft.DataColumn(ft.Text("No.")),
+                ft.DataColumn(ft.Text("User ID")),
+                ft.DataColumn(ft.Text("Status Code")),
+                ft.DataColumn(ft.Text("State")),
+                ft.DataColumn(ft.Text("Date")),
+                ft.DataColumn(ft.Text("Updated Date")),
+            ],
+            rows=rows
+        )
+
+        return ft.Column([self.data_table])
+
+    def on_selection_change(self, e):
+        # Acción que ocurre cuando se selecciona una fila
+        print("Fila seleccionada:", e.control)
