@@ -10,15 +10,19 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         MyTheme.__init__(self,page)
         BarcodeFrame.__init__(self,page)
         MyReport.__init__(self)
-        
+
+        self.page.vertical_alignment = ft.MainAxisAlignment.START
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        self.page.padding = 0  # Sin padding en la página
+        self.page.spacing = 0  # Sin espacio entre widgets
+        # self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.title = "Login"  
         self.page.window_favicon = ft.Image(src="assets/ulti.ico")
         # self.page.theme_mode = ft.ThemeMode.DARK
         self.page.appbar = self.create_appbar()
         self.page.clean()
         self.page.add(self.barcode_container) # FOR TEST
-        self.btn_menu_profile.visible = True #this to be FALSE for test 
+        self.btn_menu_profile.visible = True #this to be TRUE for test 
         # self.page.on_login = self.my_login()
         
     def my_login(self):

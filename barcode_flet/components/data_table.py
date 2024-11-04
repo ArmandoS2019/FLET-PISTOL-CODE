@@ -1,5 +1,7 @@
 import flet as ft
 from db.my_mongodb import collection
+import requests
+from config.config import BASE_URL  # Import BASE_URL from config.py
 
 class MyDataTable:
 
@@ -41,6 +43,7 @@ class MyDataTable:
         return True
 
     def insert_data_to_montodb(self):
+        
         my_data = {'user_id':655,
                    'status_code':'Recibido en el archivo insp.',
                    'state':'DESPACHADO',
@@ -81,35 +84,76 @@ class MyDataTable:
                     ft.DataColumn(ft.Text("Column 5"))
                     ]
 
-        # Crear filas dinámicas desde los resultados de MongoDB
-        resultados = collection.find().limit(50)
-        my_rows = [ft.DataRow(
-            cells=[
-                ft.DataCell(ft.Text(str(num))),
-                ft.DataCell(ft.Text(str(documento.get("user_id", "")))),
-                ft.DataCell(ft.Text(documento.get("status_code", ""))),
-                ft.DataCell(ft.Text(documento.get("state", ""))),
-                ft.DataCell(ft.Text(documento.get("date", ""))),
-                ft.DataCell(ft.Text(documento.get("updated_date", ""))),
-            ],
-            on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
-
-        # Crear la tabla de datos (DataTable)
-        self.my_data_table = ft.DataTable(expand=True,show_checkbox_column=True,
-                                            heading_row_height=30,
-                                            data_row_max_height=30,
-                                            columns=my_column,
-                                            rows=my_rows)
         
+        try:
+            response = requests.get(f'{BASE_URL}/get_data/')
+            if response.status_code == 200:
+                data = response.json()
+                items = data['items']
+                # Construye las filas para el DataTable a partir de los datos
+                my_rows = [
+                    ft.DataRow(
+                        cells=[
+                            ft.DataCell(ft.Text(str(num))),
+                            ft.DataCell(ft.Text(str(documento.get("user_id", "")))),
+                            ft.DataCell(ft.Text(documento.get("status_code", ""))),
+                            ft.DataCell(ft.Text(documento.get("state", ""))),
+                            ft.DataCell(ft.Text(documento.get("date", ""))),
+                            ft.DataCell(ft.Text(documento.get("updated_date", ""))),
+                        ],
+                        on_select_changed=self.on_selection_change
+                    ) for num, documento in enumerate(items, start=1)
+                ]
+                
+        except requests.RequestException as e:
+            print(f"Error de solicitud: {e}")
+        
+        
+        
+        # Crear filas dinámicas desde los resultados de MongoDB
+        # resultados = collection.find().limit(50)
+
+        # my_rows = [ft.DataRow(
+        #     cells=[
+        #         ft.DataCell(ft.Text(str(num))),
+        #         ft.DataCell(ft.Text(str(documento.get("user_id", "")))),
+        #         ft.DataCell(ft.Text(documento.get("status_code", ""))),
+        #         ft.DataCell(ft.Text(documento.get("state", ""))),
+        #         ft.DataCell(ft.Text(documento.get("date", ""))),
+        #         ft.DataCell(ft.Text(documento.get("updated_date", ""))),
+        #     ],
+        #     on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
+        print(my_rows)
+        # Crear la tabla de datos (DataTable)
+        self.my_data_table = ft.DataTable(expand=True,
+                                          show_checkbox_column=True,
+                                          heading_row_height=30,
+                                          data_row_max_height=30,heading_row_color=ft.colors.BLACK12,
+                                          columns=my_column,
+                                          rows=my_rows, 
+                                          data_text_style = ft.TextStyle(
+                                                color=self.page.theme.color_scheme.secondary,           # Color azul para el texto
+                                                size=14,                         # Tamaño de fuente
+                                                weight=ft.FontWeight.NORMAL,     # Peso de fuente normal (puede ser BOLD para negrita)
+                                                font_family="Arial",             # Fuente específica
+                                            ),
+                                          heading_text_style=ft.TextStyle(
+                                                color=self.page.theme.color_scheme.secondary,
+                                                size=16,
+                                                weight=ft.FontWeight.BOLD),
+                                          border=ft.BorderSide(color=ft.colors.RED, width=10)
+                                          )
+        
+
         data_table_container = ft.Container(expand=True,
                                             border_radius=ft.border_radius.only(top_left=10,top_right=10),
                                             shadow=ft.BoxShadow(spread_radius=8,
                                                                 blur_radius=15,
                                                                 color=ft.colors.with_opacity(0.15,'black')),
-                                            bgcolor=self.page.theme.color_scheme.primary_container,
+                                            bgcolor=self.page.theme.color_scheme.secondary_container,
                                             content=ft.Row(controls=[ft.Column(controls=[self.my_data_table],
-                                                                auto_scroll=False, 
-                                                                scroll=ft.ScrollMode.ALWAYS)],
+                                                                               auto_scroll=False, 
+                                                                               scroll=ft.ScrollMode.ALWAYS)],
                                                            scroll=ft.ScrollMode.ALWAYS)
                                             )
         return data_table_container

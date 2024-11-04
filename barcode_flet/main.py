@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from fastapi import HTTPException
 import os
-from routers import router_image
+from api import router_image, router_data
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -28,6 +28,9 @@ app.include_router(router_image,
 app.include_router(router_image, 
                    prefix="/read_qr", 
                    tags=["Images"]) #This routes get FROM FAST API other API folder
+
+app.include_router(router_data,
+                   tags=["Data"]) #This routes get FROM FAST API other API folder
 
 
 app.mount("/",flet_fastapi.app(main, 

@@ -1,5 +1,7 @@
 import flet as ft
 import time
+import requests
+from config.config import BASE_URL  # Import BASE_URL from config.py
 
 class MyComponents(ft.Page):
     
@@ -8,25 +10,30 @@ class MyComponents(ft.Page):
         
     def send_save_image_report(self,e):
         self.my_current_user = self.page.client_storage.get("username").lower()
-        self.page.launch_url(f'images/download_image/{self.my_current_user}.png')
+        # self.page.launch_url(f'images/download_image/{self.my_current_user}.png')
+        # self.page.launch_url(f'get_data/')
+        try:
+            response = requests.get(f'{BASE_URL}/get_data/')
+            if response.status_code == 200:
+                data = response.json()
+                print(data['items'])
+            else:
+                print(f"Error: {response.status_code}")
+        except requests.RequestException as e:
+            print(f"Error de solicitud: {e}") 
+             
         return True
     
     def btn_send_report_whatsapp(self,e):
-        # Image URL (hosted online) to send
-        # image_url = "https://example.com/path/to/your/image.jpg"
         phone_number = "18293871165"
-        
-        # WhatsApp link with message text including the image URL
-        # whatsapp_link = f"https://wa.me/{phone_number}?text=Check out this image: {image_url}"
-    
         self.page.launch_url(f"https://wa.me/18293871165?text=Hello%20from%20FastAPI!")
         return True
        
     def btn_cupertino_status(self):
         self.btn_cupertino_status = ft.CupertinoNavigationBar(
-        bgcolor=self.page.theme.color_scheme.primary_container,
-        inactive_color=ft.colors.GREY,
-        active_color=ft.colors.YELLOW_ACCENT_700,
+        bgcolor=self.page.theme.color_scheme.primary,
+        inactive_color=self.page.theme.color_scheme.on_error,
+        active_color=self.page.theme.color_scheme.secondary,
         on_change=lambda e: print("Selected tab:", e.control.selected_index),
             destinations=[
                 ft.NavigationBarDestination(icon=ft.icons.MOVE_TO_INBOX,

@@ -32,9 +32,15 @@ class MyAppBar:
         
         appbar = ft.AppBar(
             leading=ft.Image(src="assets/icon.png", width=50, height=50),leading_width=40,
-            title=ft.Text("Ultitracking"),
+            title=ft.Text("ULTI-TRACKING",
+            size=30,  # Tamaño grande para hacer el texto destacado
+            weight=ft.FontWeight.BOLD,  # Texto en negrita
+            color=self.page.theme.color_scheme.primary,  # Color blanco para destacar sobre fondo oscuro
+            font_family="Arial",  # Fuente moderna
+            text_align=ft.TextAlign.CENTER
+        ),
             center_title=True,
-            bgcolor=ft.colors.LIGHT_BLUE_900,
+            bgcolor=self.page.theme.color_scheme.secondary,
             actions=[self.btn_menu_profile])
         return appbar
     
