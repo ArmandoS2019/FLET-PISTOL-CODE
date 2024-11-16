@@ -1,42 +1,22 @@
-import flet as ft
-import flet.fastapi as flet_fastapi
-from fastapi import FastAPI
-# from fastapi.responses import FileResponse
-# import os
+import cv2
+from pyzbar.pyzbar import decode
 
-async def root_main(page: ft.Page):
-    img = ft.Image(
-        src=f"/icons/icon-512.png",
-        width=100,
-        height=100,
-        fit=ft.ImageFit.CONTAIN,
-    )
-    images = ft.Row(expand=1, wrap=False, scroll="always")
+def read_barcode(image_path):
+        # Leer la imagen usando OpenCV
+        image = cv2.imread(image_path)
 
-    page.add(img, images)
+        # Decodificar códigos de barras y QR en la imagen
+        decoded_objects = decode(image)
 
-    for i in range(0, 30):
-        images.controls.append(
-            ft.Image(
-                src=f"https://picsum.photos/200/200?{i}",
-                width=200,
-                height=200,
-                fit=ft.ImageFit.NONE,
-                repeat=ft.ImageRepeat.NO_REPEAT,
-                border_radius=ft.border_radius.all(10),
-            )
-        )
-    await page.add_async(images)
-        
-    # await page.add_async(ft.Text("This is root app!"))
-
-
-async def sub_main(page: ft.Page):
-    await page.add_async(ft.Text("This is sub app!"))
-
-
-app = FastAPI()
-
-
-app.mount("/sub-app", flet_fastapi.app(sub_main))
-app.mount("/", flet_fastapi.app(root_main))
+        # Verificar si se encontraron códigos de barras o QR
+        if decoded_objects:
+            for obj in decoded_objects:
+                barcode_data = obj.data.decode('utf-8')
+                barcode_type = obj.type
+                print(f"Tipo: {barcode_type}, Contenido: {barcode_data}")
+        else:
+            print("No se encontró ningún código de barras o QR en la imagen.")
+        return True
+    
+    
+read_barcode('barcode_flet/uploads/Screenshot 2024-10-30 223258.png')

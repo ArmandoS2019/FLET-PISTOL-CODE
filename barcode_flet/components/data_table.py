@@ -1,5 +1,5 @@
 import flet as ft
-from db.my_mongodb import collection
+from db.my_mongodb import collection_doc_data
 import requests
 from config.config import BASE_URL  # Import BASE_URL from config.py
 
@@ -51,12 +51,12 @@ class MyDataTable:
                    'date':'02-23-2024',
                    'updated_date':'09-03-2024'}
         
-        result = collection.insert_one(my_data).inserted_id 
+        result = collection_doc_data.insert_one(my_data).inserted_id 
         self.update_datatable()
         return result    
     
     def update_datatable(self):
-        resultados = collection.find().limit(50)
+        resultados = collection_doc_data.find().limit(50)
         my_rows = [ft.DataRow(
             cells=[
                 ft.DataCell(ft.Text(str(num))),
@@ -103,32 +103,23 @@ class MyDataTable:
     
     def data_table(self):
         my_rows = self.get_data_from_api()
-        my_column = [ft.DataColumn(ft.Text("#")),
+        my_column = [
+                    ft.DataColumn(ft.Text("#")),
                     ft.DataColumn(ft.Text("Column 1"),on_sort=lambda e: print(f"{e.column_index}, {e.ascending}")),
                     ft.DataColumn(ft.Text("Column 2")),
                     ft.DataColumn(ft.Text("Column 3")),
                     ft.DataColumn(ft.Text("Column 4")),
                     ft.DataColumn(ft.Text("Column 5"))
                     ]
-        # #Crear filas dinámicas desde los resultados de MongoDB
-        # resultados = collection.find().limit(50) 
-        # my_rows = [ft.DataRow(
-        #     cells=[
-        #         ft.DataCell(ft.Text(str(num))),
-        #         ft.DataCell(ft.Text(str(documento.get("user_id", "")))),
-        #         ft.DataCell(ft.Text(documento.get("status_code", ""))),
-        #         ft.DataCell(ft.Text(documento.get("state", ""))),
-        #         ft.DataCell(ft.Text(documento.get("date", ""))),
-        #         ft.DataCell(ft.Text(documento.get("updated_date", ""))),
-        #     ],
-        #     on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
-        
-        
         # Crear la tabla de datos (DataTable)
         self.my_data_table = ft.DataTable(expand=True,
+                                          sort_column_index=0,
+                                          sort_ascending=True,
+                                          data_row_color={ft.ControlState.HOVERED: ft.colors.YELLOW_200},
+                                          heading_row_color=ft.colors.BLACK12,
                                           show_checkbox_column=True,
                                           heading_row_height=30,
-                                          data_row_max_height=30,heading_row_color=ft.colors.BLACK12,
+                                          data_row_max_height=30,
                                           columns=my_column,
                                           rows=my_rows, 
                                           data_text_style = ft.TextStyle(
@@ -149,14 +140,14 @@ class MyDataTable:
                                             shadow=ft.BoxShadow(spread_radius=8,
                                                                 blur_radius=15,
                                                                 color=ft.colors.with_opacity(0.15,'black')),
-                                            bgcolor=self.page.   theme.color_scheme.secondary_container,
-                                            content=ft.Row(controls=[ft.Column(controls=[self.my_data_table],
-                                                                               auto_scroll=False, 
-                                                                               scroll=ft.ScrollMode.ALWAYS)],
-                                                           scroll=ft.ScrollMode.ALWAYS)
+                                            bgcolor=self.page.theme.color_scheme.secondary_container,
+                                            content=ft.Row(controls=[
+                                                ft.Column(controls=[self.my_data_table],
+                                                          auto_scroll=False, 
+                                                          scroll=ft.ScrollMode.ALWAYS)],
+                                                          scroll=ft.ScrollMode.ALWAYS)
                                             )
-        
-        return data_table_container
+        return ft.Container(content=ft.Column(controls=[ft.Text(value=my_column),data_table_container]))
     
 class DataTableApp(ft.UserControl):
     def build(self):

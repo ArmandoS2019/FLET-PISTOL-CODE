@@ -1,74 +1,50 @@
-from typing import Dict
+import flet as ft
+import shutil
 
-import flet
-from flet import (
-    Column,
-    ElevatedButton,
-    FilePicker,
-    FilePickerResultEvent,
-    FilePickerUploadEvent,
-    FilePickerUploadFile,
-    Page,
-    ProgressRing,
-    Ref,
-    Row,
-    Text,
-    icons,
-)
+class MyApp(ft.UserControl):
+    def build(self):
+        self.upload_message = ft.Text()
+        self.file_picker = ft.FilePicker(on_result=self.upload_files_result)
 
+        # Agregar el FilePicker al overlay de la página
+        self.page.overlay.append(self.file_picker)
 
-def main(page: Page):
-    prog_bars: Dict[str, ProgressRing] = {}
-    files = Ref[Column]()
-    upload_button = Ref[ElevatedButton]()
+        return ft.Column([
+            ft.ElevatedButton("Subir imagen", on_click=lambda _: self.file_picker.pick_files(allow_multiple=False, file_type=ft.FilePickerFileType.IMAGE)),
+            self.upload_message
+        ])
 
-    def file_picker_result(e: FilePickerResultEvent):
-        upload_button.current.disabled = True if e.files is None else False
-        prog_bars.clear()
-        files.current.controls.clear()
-        if e.files is not None:
-            for f in e.files:
-                prog = ProgressRing(value=0, bgcolor="#eeeeee", width=20, height=20)
-                prog_bars[f.name] = prog
-                files.current.controls.append(Row([prog, Text(f.name)]))
-        page.update()
+    def upload_files_result(self, e: ft.FilePickerResultEvent):
+        if e.files:
+            print(e.files)
+            # Obtener la ruta del archivo seleccionado
+            file_path = e.files[0].path
+            file_name = e.files[0].name
+            print(file_path)
+            print(file_name)
+            # Guardar el archivo en una ubicación específica
+            try:
+                upload_path = f"uploads/{file_name}"
+                with open(file_path, "rb") as src_file:
+                    with open(upload_path, "wb") as dest_file:
+                        shutil.copyfileobj(src_file, dest_file)
 
-    def on_upload_progress(e: FilePickerUploadEvent):
-        prog_bars[e.file_name].value = e.progress
-        prog_bars[e.file_name].update()
+                self.upload_message.value = f"Imagen subida y guardada en: {upload_path}"
+            except Exception as ex:
+                self.upload_message.value = f"Error al subir la imagen: {ex}"
 
-    file_picker = FilePicker(on_result=file_picker_result, on_upload=on_upload_progress)
+        else:
+            self.upload_message.value = "No se seleccionó ningún archivo"
 
-    def upload_files(e):
-        uf = []
-        if file_picker.result is not None and file_picker.result.files is not None:
-            for f in file_picker.result.files:
-                uf.append(
-                    FilePickerUploadFile(
-                        f.name,
-                        upload_url=page.get_upload_url(f.name, 600),
-                    )
-                )
-            file_picker.upload(uf)
+        self.upload_message.update()
 
-    # hide dialog in a overlay
-    page.overlay.append(file_picker)
+def main(page: ft.Page):
+    # Crear la carpeta de subidas si no existe
+    import os
+    if not os.path.exists('uploads'):
+        os.makedirs('uploads')
 
-    page.add(
-        ElevatedButton(
-            "Select files...",
-            icon=icons.FOLDER_OPEN,
-            on_click=lambda _: file_picker.pick_files(allow_multiple=True),
-        ),
-        Column(ref=files),
-        ElevatedButton(
-            "Upload",
-            ref=upload_button,
-            icon=icons.UPLOAD,
-            on_click=upload_files,
-            disabled=True,
-        ),
-    )
+    page.title = "Subir y Guardar Imagen"
+    page.add(MyApp())
 
-
-flet.app(target=main, upload_dir="fotos")
+ft.app(target=main)

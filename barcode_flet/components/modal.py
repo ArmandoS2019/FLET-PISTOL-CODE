@@ -7,6 +7,7 @@ class MyModal:
         
     def modal_alert_status(self):
         self.dlg_modal = ft.AlertDialog(
+        bgcolor='#040f3d',
         modal=True,
         title=ft.Text("Please confirm"),
         content=ft.Text("Do you really want to delete all those files?"),
@@ -17,6 +18,7 @@ class MyModal:
     def modal_show_report(self, image):      
         
         self.my_modal_show_report = ft.AlertDialog(
+        bgcolor=ft.colors.LIGHT_BLUE_900,
         modal=True,
         title=ft.Text("Usuario: Armando S.\nImprima su reporte", size=15, color="#FFCC00", italic=True),
         content=image,

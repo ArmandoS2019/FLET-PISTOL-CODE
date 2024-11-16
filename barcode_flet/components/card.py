@@ -8,7 +8,7 @@ class MyCard:
         
     def my_card(self):
         self.mycard = ft.Card(
-            content=ft.Container(
+            content=ft.Container(bgcolor="#04396b",
                 content=ft.Column(
                     [
                         ft.ListTile(
@@ -21,8 +21,8 @@ class MyCard:
                         ft.Row(
                             [ft.TextButton("Recibir", on_click=self.snackbar_success, 
                                 icon=ft.icons.CHECK_CIRCLE,
-                                icon_color=self.page.theme.color_scheme.secondary, 
-                                style=ft.ButtonStyle(color=self.page.theme.color_scheme.secondary)), 
+                                icon_color=ft.colors.YELLOW_ACCENT_200, 
+                                style=ft.ButtonStyle(color=ft.colors.YELLOW_ACCENT_200)), 
                              ft.TextButton("Cerrar", on_click=self.handle_close, 
                                 icon=ft.icons.CANCEL,  
                                 icon_color=self.page.theme.color_scheme.on_error,

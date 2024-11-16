@@ -41,9 +41,15 @@ class MyComponents(ft.Page):
         on_change=lambda e: print("Selected tab:", e.control.selected_index),
             destinations=[
                 ft.NavigationBarDestination(icon=ft.icons.MOVE_TO_INBOX,
-                                            selected_icon=ft.icons.MOVE_TO_INBOX, 
+                                            selected_icon=ft.icons.MOVE_TO_INBOX,
+                                            selected_icon_content=ft.Icon(ft.icons.CHECK, 
+                                                                          color=self.page.theme.color_scheme.on_tertiary),
+                                            icon_content=ft.Text("ESTAS DESPACHANDO", size=18, weight="bold"),
                                             label="RECIBIR"),
                 ft.NavigationBarDestination(icon=ft.icons.ARROW_FORWARD, 
+                                            selected_icon_content=ft.Icon(ft.icons.CHECK, 
+                                                                          color=self.page.theme.color_scheme.on_tertiary),
+                                            icon_content=ft.Text("ESTAS RECIBIENDO", size=18, weight="bold"),
                                             label="DESPACHAR"),
             ]
         )

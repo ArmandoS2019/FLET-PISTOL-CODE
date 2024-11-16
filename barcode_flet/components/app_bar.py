@@ -12,6 +12,8 @@ class MyAppBar:
                                     on_click=self.changed_theme)
         
         btn_config = ft.PopupMenuButton(visible=True,
+                                        bgcolor=ft.colors.BLUE_800,
+                                        icon_color=ft.colors.WHITE,
             items=[self.btn_popup_change_theme,
                    ft.PopupMenuItem(),
                    ft.PopupMenuItem(text='Editar perfil',
