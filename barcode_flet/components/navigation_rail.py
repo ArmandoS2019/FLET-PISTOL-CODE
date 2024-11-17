@@ -25,7 +25,11 @@ class MyNavigationRail:
                 barcode_data = obj.data.decode('utf-8')
                 barcode_type = obj.type
                 print(f"Tipo: {barcode_type}, Contenido: {barcode_data}")
+                color = self.page.theme.color_scheme.on_tertiary
+                self.snackbar_read_qrbarcode(e,'Codigo: XXXX, leido exitosamente.',color)
         else:
+            color = self.page.theme.color_scheme.on_error
+            self.snackbar_read_qrbarcode(e,'No se encontró ningún código de barras o QR, vuelva a intentarlo.',color)
             print("No se encontró ningún código de barras o QR en la imagen.")
         # return True
         
@@ -41,7 +45,6 @@ class MyNavigationRail:
                 )
             self.file_picker.upload(upload_list)
 
-
     def my_navigation_rail(self):
                 
         self.file_picker = ft.FilePicker(on_result=self.upload_files,
@@ -56,10 +59,12 @@ class MyNavigationRail:
                             content=ft.Column(alignment=ft.MainAxisAlignment.START,
                                 controls=[self.upload_message,
                                     ft.IconButton(icon=ft.icons.ADD_A_PHOTO,
-                                                  hover_color=ft.colors.LIGHT_BLUE_100,
-                                                  icon_color=self.page.theme.color_scheme.secondary,
-                                                  tooltip="Envie foto QR/Cod.Barra",
-                                                  on_click=lambda _: self.file_picker.pick_files(allow_multiple=False, file_type=ft.FilePickerFileType.IMAGE)),
+                                    hover_color=ft.colors.LIGHT_BLUE_100,
+                                    icon_color=self.page.theme.color_scheme.secondary,
+                                    tooltip="Envie foto QR/Cod.Barra",
+                                    on_click=lambda _: self.file_picker.pick_files(dialog_title="Enviar QR o CODIGO DE BARRA",
+                                                                                    allow_multiple=False, 
+                                                                                    file_type=ft.FilePickerFileType.IMAGE)),
                                     ft.IconButton(on_click=self.verify_check_true_datatable,
                                                   hover_color=ft.colors.LIGHT_BLUE_100,
                                                   icon_color=self.page.theme.color_scheme.secondary,
