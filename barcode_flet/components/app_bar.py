@@ -30,7 +30,6 @@ class MyAppBar:
             
         self.btn_menu_profile = ft.Container(content=ft.Column(controls=[row1],
                                                                alignment=ft.MainAxisAlignment.CENTER))
-
         
         appbar = ft.AppBar(
             leading=ft.Image(src="assets/icon.png", width=50, height=50),leading_width=40,

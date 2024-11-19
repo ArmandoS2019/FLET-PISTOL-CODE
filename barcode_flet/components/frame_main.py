@@ -7,18 +7,7 @@ class BarcodeFrame:
     def __init__(self, page):
         self.page = page
         
-        self.page.floating_action_button = ft.FloatingActionButton(
-            text='Enviar foto QR',
-            icon=ft.icons.DOCUMENT_SCANNER_ROUNDED,
-            bgcolor=ft.colors.DEEP_ORANGE_900, 
-            foreground_color=ft.colors.WHITE,
-            opacity=0.9,
-            shape=ft.RoundedRectangleBorder(radius=5),
-            mini=True,
-            on_click=lambda _: self.file_picker.pick_files(
-                dialog_title="Enviar QR o CODIGO DE BARRA",
-                allow_multiple=False, 
-                file_type=ft.FilePickerFileType.IMAGE))
+        
             
         # Definir un diccionario con los atributos comunes
         self.common_attributes = {
@@ -71,17 +60,19 @@ class BarcodeFrame:
                                     vertical_alignment=ft.CrossAxisAlignment.START,
                                     alignment=ft.MainAxisAlignment.START,
                                     controls=[self.table_container])
-                
         
-        self.barcode_container = ft.Row(spacing=10,
-            expand=True,
-            controls=[self.my_navigation_rail(),
-                ft.Column(expand=True,
+        self.main_pagelet = ft.Pagelet(
+                    expand=True,
+                    appbar=self.create_appbar(),
+                    content=ft.Column(expand=True,
                           controls=[
                                     self.column_cupertino_status_left,
                                     self.row_barcode,
-                                    self.two_container_2])
-            ]
-        )
-        return self.barcode_container
+                                    self.two_container_2]),
+                    bgcolor=ft.colors.RED,
+                    bottom_app_bar=self.get_bottom_appbar(),
+                    floating_action_button=self.get_floating_button(),
+                    floating_action_button_location=ft.FloatingActionButtonLocation.CENTER_DOCKED,
+                )
+        return self.main_pagelet
                 
