@@ -7,12 +7,19 @@ class BarcodeFrame:
     def __init__(self, page):
         self.page = page
         
-        self.page.floating_action_button = ft.FloatingActionButton(icon=ft.icons.DOCUMENT_SCANNER_ROUNDED,
-                                                                   bgcolor=ft.colors.DEEP_ORANGE_900, 
-                                                                   on_click=lambda _: self.file_picker.pick_files(
-                                                                       dialog_title="Enviar QR o CODIGO DE BARRA",
-                                                                       allow_multiple=False, 
-                                                                       file_type=ft.FilePickerFileType.IMAGE))
+        self.page.floating_action_button = ft.FloatingActionButton(
+            text='Enviar foto QR',
+            icon=ft.icons.DOCUMENT_SCANNER_ROUNDED,
+            bgcolor=ft.colors.DEEP_ORANGE_900, 
+            foreground_color=ft.colors.WHITE,
+            opacity=0.9,
+            shape=ft.RoundedRectangleBorder(radius=5),
+            mini=True,
+            on_click=lambda _: self.file_picker.pick_files(
+                dialog_title="Enviar QR o CODIGO DE BARRA",
+                allow_multiple=False, 
+                file_type=ft.FilePickerFileType.IMAGE))
+            
         # Definir un diccionario con los atributos comunes
         self.common_attributes = {
             "expand":True,

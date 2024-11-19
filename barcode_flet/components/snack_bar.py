@@ -7,20 +7,40 @@ class MySnackBar:
         self.my_current_user = self.page.client_storage.get("username").lower()
         
     def snackbar_read_qrbarcode(self, e, message, color):
-        self.my_current_user = self.page.client_storage.get("username")       
-        self.page.snack_bar = ft.SnackBar(
-            duration=4500,
+        
+        def close_snackbar(e):
+            print('hola')
+            self.snackbar_success_barcode.duration = 1
+            self.page.update()
+
+        self.my_qr_data_card =ft.Card(
+            content=ft.Container(
+                content=ft.Column(
+                    [
+                        ft.ListTile(
+                            leading=ft.Icon(ft.icons.DESCRIPTION),
+                            title=ft.Text("No se detecto lectura de algun QR"),
+                            subtitle=ft.Text(
+                                "Trate de enfocar la camara al QR y enviela nueva vez."
+                            ),
+                        ),
+                        ]
+                )
+            )
+        )
+        
+        self.snackbar_success_barcode = ft.SnackBar(
+            duration=2000,
             show_close_icon=True,
-            content=ft.Row([
-                            ft.Icon(name=ft.icons.CHECK_CIRCLE, color=ft.colors.WHITE),  # Ícono de información
-                            ft.Text(message),
-                            ft.Text(f"{self.my_current_user}.", 
-                                    size=20, color="#333333", italic=True),
-                        ]),
+            content=self.my_qr_data_card,
             bgcolor=color,
+            action_color=ft.colors.RED,
+            close_icon_color=ft.colors.BLUE_900,
             shape=ft.RoundedRectangleBorder(radius=10), 
             elevation=6,
             behavior=ft.SnackBarBehavior.FLOATING)
+        
+        self.page.snack_bar = self.snackbar_success_barcode
         self.page.snack_bar.open = True
         self.page.update()
         return True    
