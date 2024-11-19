@@ -1,27 +1,35 @@
 import time
 import flet as ft
 import os
-from components import (MyAppBar, MyCard, MyComponents, MyDataTable, 
-                        BarcodeFrame, MyModal, MySnackBar, MyTheme, 
+from components import (MyAppBar, 
+                        MyCard, 
+                        MyComponents, 
+                        MyDataTable, 
+                        BarcodeFrame, 
+                        MyModal, 
+                        MySnackBar, 
+                        MyTheme, 
                         BottomAppBar, 
-                        MyFloatinButton)
+                        MyFloatinButton, 
+                        MyNavigationDrawer, 
+                        MyCupertinoActionSheet)
 from report import MyReport
 from config.config import BASE_URL  # Import BASE_URL from config.py
 import requests 
 
 
-class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, MySnackBar,MyModal,MyCard,MyFloatinButton,BottomAppBar):
+class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, MySnackBar,MyModal,MyCard,MyFloatinButton,BottomAppBar,MyNavigationDrawer, MyCupertinoActionSheet):
     
     def __init__(self, page):
         MyTheme.__init__(self,page)
         BarcodeFrame.__init__(self,page)
         MyReport.__init__(self)
-
+        
         self.page.vertical_alignment = ft.MainAxisAlignment.START
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.padding = 0  # Sin padding en la página
         self.page.spacing = 0  # Sin espacio entre widgets
-        self.page.bgcolor = ft.colors.WHITE
+        # self.page.bgcolor = ft.colors.RED
         self.page.title = "Login"  
         self.page.assets_dir = os.path.join(os.getcwd(), "assets")
         self.page.window_favicon = ft.Image(src="ulti.ico")
@@ -38,10 +46,10 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         "selection_color":ft.colors.LIGHT_BLUE_50,
         "border_radius": 10,
         'border_color':ft.colors.BLUE_100,                     # Color del borde del campo
-        'focused_border_color':ft.colors.BLUE_900,             # Color del borde cuando está enfocado
-        'cursor_color':ft.colors.BLUE_900,                     # Color del cursor (barra de texto)
+        'focused_border_color':self.page.theme.color_scheme.secondary,             # Color del borde cuando está enfocado
+        'cursor_color':self.page.theme.color_scheme.secondary,                     # Color del cursor (barra de texto)
         'bgcolor':ft.colors.GREY_100,
-        'text_style':ft.TextStyle(color=ft.colors.BLUE_900),   # Color del texto de entrada
+        'text_style':ft.TextStyle(color=ft.colors.BLUE_800),   # Color del texto de entrada
         'label_style':ft.TextStyle(color=ft.colors.BLUE_800),  # Color de la etiqueta (label)
         'hint_style':ft.TextStyle(color=ft.colors.BLUE_GREY_600),                 # Ícono de sufijo
         }  
@@ -101,7 +109,7 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
        
         # Botón de iniciar sesión
         login_button = ft.ElevatedButton("Iniciar sesión",
-                                         bgcolor=ft.colors.BLUE_900,
+                                         bgcolor=self.page.theme.color_scheme.secondary,
                                          color=ft.colors.WHITE,
                                          icon=ft.icons.LOGIN, 
                                          on_click=authenticate_user)

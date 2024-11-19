@@ -18,7 +18,7 @@ class MyModal:
     def modal_show_report(self, image):      
         
         self.my_modal_show_report = ft.AlertDialog(
-        bgcolor=ft.colors.LIGHT_BLUE_900,
+        bgcolor=self.page.theme.color_scheme.secondary,
         modal=True,
         title=ft.Text("Usuario: Armando S.\nImprima su reporte", size=15, color="#FFCC00", italic=True),
         content=image,

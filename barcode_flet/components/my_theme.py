@@ -10,13 +10,13 @@ class MyTheme(ft.Page):
             
             color_scheme=ft.ColorScheme(
                 primary=ft.colors.WHITE,
-                secondary=ft.colors.BLUE_900,
+                secondary=ft.colors.PRIMARY_CONTAINER,
                 
                 secondary_container=ft.colors.BLUE_GREY_50,
                 
                 on_error=ft.colors.RED_ACCENT_400,
                 primary_container=ft.colors.SURFACE_VARIANT,
-                on_tertiary_container=ft.colors.BLUE_900,
+                on_tertiary_container=ft.colors.PRIMARY_CONTAINER,
                 tertiary_container=ft.colors.BLACK12,
                 on_tertiary=ft.colors.LIGHT_GREEN_ACCENT_700,
                 tertiary=ft.colors.YELLOW_ACCENT_700,
@@ -29,10 +29,10 @@ class MyTheme(ft.Page):
         scrollbar_theme=ft.ScrollbarTheme(
                 track_color={
                     ft.MaterialState.HOVERED: ft.colors.BLUE_200,
-                    ft.MaterialState.DEFAULT: ft.colors.BLUE_900,
+                    ft.MaterialState.DEFAULT: ft.colors.PRIMARY_CONTAINER,
                 },
                 track_visibility=True,
-                track_border_color=ft.colors.BLUE_900,
+                track_border_color=ft.colors.PRIMARY_CONTAINER,
                 thumb_visibility=True,
                 thickness=10,
                 radius=5,

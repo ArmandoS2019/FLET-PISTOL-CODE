@@ -9,7 +9,7 @@ class MyComponents(ft.Page):
         self.page = page
         
     def send_save_image_report(self,e):
-        self.my_current_user = self.page.client_storage.get("username").lower()
+        self.my_current_user = self.page.client_storage.get("username")
         self.page.launch_url(f'images/download_image/{self.my_current_user}.png')
         self.page.launch_url(f'get_data/')
         # try:

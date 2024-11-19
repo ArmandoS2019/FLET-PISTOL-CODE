@@ -32,7 +32,8 @@ class MyAppBar:
                                                                alignment=ft.MainAxisAlignment.CENTER))
         
         appbar = ft.AppBar(
-            leading=ft.Image(src="assets/icon.png", width=50, height=50),leading_width=40,
+            leading=ft.Image(src="assets/icon.png", width=50, height=50),
+            leading_width=40,
             title=ft.Text("ULTI-TRACKING",
             size=30,  # Tamaño grande para hacer el texto destacado
             weight=ft.FontWeight.BOLD,  # Texto en negrita

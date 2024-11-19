@@ -1,22 +1,47 @@
-import cv2
-from pyzbar.pyzbar import decode
+import flet as ft
 
-def read_barcode(image_path):
-        # Leer la imagen usando OpenCV
-        image = cv2.imread(image_path)
+def main(page: ft.Page):
+    def open_pagelet_end_drawer(e):
+        pagelet.end_drawer.open = True
+        pagelet.end_drawer.update()
 
-        # Decodificar códigos de barras y QR en la imagen
-        decoded_objects = decode(image)
+    pagelet = ft.Pagelet(
+        appbar=ft.AppBar(
+            title=ft.Text("Pagelet AppBar title"), bgcolor=ft.colors.AMBER_ACCENT
+        ),
+        content=ft.Text("Pagelet body"),
+        bgcolor=ft.colors.AMBER_100,
+        bottom_app_bar=ft.BottomAppBar(
+            bgcolor=ft.colors.BLUE,
+            shape=ft.NotchShape.CIRCULAR,
+            content=ft.Row(
+                controls=[
+                    ft.IconButton(icon=ft.icons.MENU, icon_color=ft.colors.WHITE),
+                    ft.Container(expand=True),
+                    ft.IconButton(icon=ft.icons.SEARCH, icon_color=ft.colors.WHITE),
+                    ft.IconButton(icon=ft.icons.FAVORITE, icon_color=ft.colors.WHITE),
+                ]
+            ),
+        ),
+        end_drawer=ft.NavigationDrawer(
+            controls=[
+                ft.NavigationDrawerDestination(
+                    icon=ft.icons.ADD_TO_HOME_SCREEN_SHARP, label="Item 1"
+                ),
+                ft.NavigationDrawerDestination(
+                    icon=ft.icons.ADD_COMMENT, label="Item 2"
+                ),
+            ],
+        ),
+        floating_action_button=ft.FloatingActionButton(
+            "Open", on_click=open_pagelet_end_drawer
+        ),
+        floating_action_button_location=ft.FloatingActionButtonLocation.CENTER_DOCKED,
+        width=400,
+        height=400,
+    )
 
-        # Verificar si se encontraron códigos de barras o QR
-        if decoded_objects:
-            for obj in decoded_objects:
-                barcode_data = obj.data.decode('utf-8')
-                barcode_type = obj.type
-                print(f"Tipo: {barcode_type}, Contenido: {barcode_data}")
-        else:
-            print("No se encontró ningún código de barras o QR en la imagen.")
-        return True
-    
-    
-read_barcode('barcode_flet/uploads/Screenshot 2024-10-30 223258.png')
+    page.add(pagelet)
+
+
+ft.app(main)

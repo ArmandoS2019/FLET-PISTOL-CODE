@@ -22,13 +22,13 @@ class MyFloatinButton:
             self.dlg_modal.open = True
             self.page.update()
             print("Respuesta de la API:", response.json())
-        else:
+        else:               
             if not self.dlg_modal.open:
-                color = self.page.theme.color_scheme.on_error
-                self.snackbar_read_qrbarcode(e, 'No se encontró ningún código de barras o QR, vuelva a intentarlo.', color)
-            print("Error:", response.status_code, response.text)
-        return True
-        
+                self.page.snack_bar.open = True
+                self.page.snack_bar.bgcolor = self.page.theme.color_scheme.on_error
+                self.page.snack_bar.content = self.my_card_snackbar('QR NO ENCONTRADO','Vuelva a Intentarlo')
+                self.page.update()              
+                
     def upload_files(self,e):
         upload_list = []
         if self.file_picker.result != None and self.file_picker.result.files != None:
@@ -57,15 +57,23 @@ class MyFloatinButton:
         self.page.overlay.append(self.file_picker)
         
         self.my_floating_button_send_qr = ft.FloatingActionButton(
-        text='Enviar foto QR',
-        icon=ft.icons.DOCUMENT_SCANNER_ROUNDED, 
+        content=ft.Icon(name=ft.icons.CAMERA_ALT, color=ft.colors.ORANGE_700, size=40),
         foreground_color=ft.colors.WHITE,
+        bgcolor=ft.colors.BLACK,
+        height=56,
+        width=56,
         opacity=0.9,
-        shape=ft.RoundedRectangleBorder(radius=90),
+        shape=ft.RoundedRectangleBorder(radius=50),
         mini=True,
         on_click=lambda _: self.file_picker.pick_files(
             dialog_title="Enviar QR o CODIGO DE BARRA",
             allow_multiple=False, 
             file_type=ft.FilePickerFileType.IMAGE))
         
-        return self.my_floating_button_send_qr
+        return ft.Container(
+                            self.my_floating_button_send_qr,
+                            border=ft.border.all(2, ft.colors.ORANGE_300),
+                            border_radius=ft.border_radius.all(50),
+                            padding=5,  # Agrega espacio alrededor del botón
+                            ink=True  # Activa el efecto de onda al hacer clic
+                        )  # Espacio entre el borde y el contenido)

@@ -17,7 +17,7 @@ class MyDataTable:
         ]
         
         # Procesar los datos seleccionados
-        self.my_current_user = self.page.client_storage.get("username").lower()
+        self.my_current_user = self.page.client_storage.get("username")
         self.my_image_report = self.get_image_report(selected_data, self.my_current_user)
         
         # Deseleccionar todas las filas después de la operación
@@ -39,6 +39,9 @@ class MyDataTable:
         return True
     
     def on_selection_change(self,e):
+        print('-----')
+        print(e)
+        print('-----')
         e.control.selected = not e.control.selected  # Alternar entre seleccionado y no seleccionado
         e.page.update()  
         return True
@@ -84,7 +87,12 @@ class MyDataTable:
                 # Construir filas para el DataTable
                 my_rows = [
                     ft.DataRow(
+                        color={
+                            ft.ControlState.DEFAULT: ft.colors.BLUE,  # Color por defecto (negro)
+                            ft.ControlState.HOVERED: ft.colors.RED,  # Color al pasar el cursor (rojo)
+                            ft.ControlState.FOCUSED: ft.colors.YELLOW},  # Color cuando está enfocado (verde)},
                         cells=[
+                            
                             ft.DataCell(ft.Text(str(num))),
                             ft.DataCell(ft.Text(item["user_id"])),
                             ft.DataCell(ft.Text(item["status_code"])),
@@ -113,11 +121,17 @@ class MyDataTable:
                     ]
         # Crear la tabla de datos (DataTable)
         self.my_data_table = ft.DataTable(expand=True,
+                                          border=ft.border.all(2, "blue"), 
+                                          border_radius=10,
+                                          bgcolor=ft.colors.GREY_400,
+                                          vertical_lines=ft.BorderSide(1, "blue"),
+                                          horizontal_lines=ft.BorderSide(1, "green"),
+                                          heading_row_color=ft.colors.BLACK12,
                                           sort_column_index=0,
                                           sort_ascending=True,
                                           data_row_color={ft.ControlState.HOVERED: ft.colors.YELLOW_200},
-                                          heading_row_color=ft.colors.BLACK12,
                                           show_checkbox_column=True,
+                                          divider_thickness=0,
                                           heading_row_height=30,
                                           data_row_max_height=30,
                                           columns=my_column,
@@ -132,59 +146,19 @@ class MyDataTable:
                                                 color=self.page.theme.color_scheme.secondary,
                                                 size=16,
                                                 weight=ft.FontWeight.BOLD),
-                                          border=ft.BorderSide(color=ft.colors.RED, width=10)
                                           )
 
-        data_table_container = ft.Container(expand=True,
+        data_table_container = ft.Container(expand=True,width=1300, 
+                                            alignment=ft.alignment.center,
                                             border_radius=ft.border_radius.only(top_left=10,top_right=10),
-                                            shadow=ft.BoxShadow(spread_radius=8,
-                                                                blur_radius=15,
-                                                                color=ft.colors.with_opacity(0.15,'black')),
-                                            bgcolor=self.page.theme.color_scheme.secondary_container,
+                                            
                                             content=ft.Row(controls=[
                                                 ft.Column(controls=[self.my_data_table],
                                                           auto_scroll=False, 
                                                           scroll=ft.ScrollMode.ALWAYS)],
                                                           scroll=ft.ScrollMode.ALWAYS)
                                             )
-        return ft.Container(content=ft.Column(controls=[ft.Text(value=my_column),data_table_container]))
+        return ft.Container(alignment=ft.alignment.center, bgcolor=ft.colors.GREY_200,
+                            content=ft.Column(controls=[ft.Text(value=my_column),data_table_container],
+                                              alignment=ft.alignment.center))
     
-class DataTableApp(ft.UserControl):
-    def build(self):
-        
-        # Realiza la solicitud GET
-        response = requests.get(f"{BASE_URL}/get_data/")
-        if response.status_code == 200:
-            results = response.json()
-            # Construir filas para el DataTable
-            rows = [
-                ft.DataRow(
-                    cells=[
-                        ft.DataCell(ft.Text(str(num))),
-                        ft.DataCell(ft.Text(item["user_id"])),
-                        ft.DataCell(ft.Text(item["status_code"])),
-                        ft.DataCell(ft.Text(item["state"])),
-                        ft.DataCell(ft.Text(item["date"])),
-                        ft.DataCell(ft.Text(item["updated_date"])),
-                    ],
-                    on_select_changed=self.on_selection_change
-                ) for num, item in enumerate(results['items'], start=1)
-            ]
-        # Crear el DataTable vacío
-        self.data_table = ft.DataTable(
-            columns=[
-                ft.DataColumn(ft.Text("No.")),
-                ft.DataColumn(ft.Text("User ID")),
-                ft.DataColumn(ft.Text("Status Code")),
-                ft.DataColumn(ft.Text("State")),
-                ft.DataColumn(ft.Text("Date")),
-                ft.DataColumn(ft.Text("Updated Date")),
-            ],
-            rows=rows
-        )
-
-        return ft.Column([self.data_table])
-
-    def on_selection_change(self, e):
-        # Acción que ocurre cuando se selecciona una fila
-        print("Fila seleccionada:", e.control)

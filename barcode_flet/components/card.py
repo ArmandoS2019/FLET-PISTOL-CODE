@@ -5,6 +5,14 @@ class MyCard:
 
     def __init__(self, page):
         self.page = page
+       
+    def my_card_snackbar(self, title, subtitle):
+        my_qr_data_card =ft.Card(
+                    content=ft.ListTile(
+                                    leading=ft.Icon(ft.icons.DESCRIPTION),
+                                    title=ft.Text(title),
+                                    subtitle=ft.Text(subtitle)))   
+        return my_qr_data_card
         
     def my_card(self):
         self.mycard = ft.Card(

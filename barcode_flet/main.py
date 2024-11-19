@@ -11,7 +11,6 @@ from fastapi import HTTPException
 import os
 import requests 
 from api import router_image, router_data, router_user
-from routes import Login2, HomePage #!TEST ROUTES
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
