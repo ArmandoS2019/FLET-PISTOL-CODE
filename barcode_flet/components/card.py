@@ -6,12 +6,14 @@ class MyCard:
     def __init__(self, page):
         self.page = page
        
-    def my_card_snackbar(self, title, subtitle):
+    def my_card_snackbar(self, title, subtitle, icon=ft.icons.DESCRIPTION):
         my_qr_data_card =ft.Card(
+                    adaptive=True,
                     content=ft.ListTile(
-                                    leading=ft.Icon(ft.icons.DESCRIPTION),
-                                    title=ft.Text(title),
-                                    subtitle=ft.Text(subtitle)))   
+                            leading=ft.Icon(icon),
+                            title=ft.Text(title),
+                            subtitle=ft.Text(subtitle))
+                    )   
         return my_qr_data_card
         
     def my_card(self):
@@ -27,7 +29,7 @@ class MyCard:
                             ),
                         ),
                         ft.Row(
-                            [ft.TextButton("Recibir", on_click=self.snackbar_success, 
+                            [ft.TextButton("Recibir", on_click=self.close_modal_open_success_snackbar, 
                                 icon=ft.icons.CHECK_CIRCLE,
                                 icon_color=ft.colors.YELLOW_ACCENT_200, 
                                 style=ft.ButtonStyle(color=ft.colors.YELLOW_ACCENT_200)), 

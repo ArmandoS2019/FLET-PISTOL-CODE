@@ -158,7 +158,8 @@ class MyDataTable:
                                                           scroll=ft.ScrollMode.ALWAYS)],
                                                           scroll=ft.ScrollMode.ALWAYS)
                                             )
-        return ft.Container(alignment=ft.alignment.center, bgcolor=ft.colors.GREY_200,
+        return ft.Container(alignment=ft.alignment.center,
+                            bgcolor=ft.colors.GREY_200,
                             content=ft.Column(controls=[ft.Text(value=my_column),data_table_container],
                                               alignment=ft.alignment.center))
     

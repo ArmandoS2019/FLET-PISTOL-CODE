@@ -71,7 +71,7 @@ app.include_router(router_user,
 
 
 app.mount("/",flet_fastapi.app(main, 
-                            assets_dir=os.getcwd()+'/assets', 
+                            assets_dir='/assets', 
                             upload_dir="assets/uploads", 
                             secret_key="mi_clave_secreta",
                             web_renderer=ft.WebRenderer.CANVAS_KIT))

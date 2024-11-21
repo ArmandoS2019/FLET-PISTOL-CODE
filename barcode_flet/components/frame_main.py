@@ -5,7 +5,8 @@ class BarcodeFrame:
     
     def __init__(self, page):
         self.page = page
-        
+        self.page.bgcolor = ft.colors.RED
+
         
         self.my_snack_bar = self.get_snackbar()
         self.page.snack_bar = self.my_snack_bar
@@ -20,7 +21,7 @@ class BarcodeFrame:
             }   
         
         self.btn_common_attributes = {
-        "hover_color":ft.colors.YELLOW_200,
+        "hover_color":ft.colors.LIGHT_GREEN_ACCENT_100,
         "keyboard_type":ft.KeyboardType.TEXT,
         "selection_color":ft.colors.LIGHT_BLUE_50,
         "border_radius": 10,

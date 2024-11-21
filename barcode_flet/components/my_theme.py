@@ -10,7 +10,7 @@ class MyTheme(ft.Page):
             
             color_scheme=ft.ColorScheme(
                 primary=ft.colors.WHITE,
-                secondary=ft.colors.PRIMARY_CONTAINER,
+                secondary=ft.colors.BLUE_900,
                 
                 secondary_container=ft.colors.BLUE_GREY_50,
                 
@@ -20,7 +20,7 @@ class MyTheme(ft.Page):
                 tertiary_container=ft.colors.BLACK12,
                 on_tertiary=ft.colors.LIGHT_GREEN_ACCENT_700,
                 tertiary=ft.colors.YELLOW_ACCENT_700,
-                background=ft.colors.GREY_200,  # Color de fondo de la página
+                background="#04396b",  # Color de fondo de la página
                 surface=ft.colors.LIGHT_BLUE_800,  # Color de fondo de los elementos superficiales
                 on_primary=ft.colors.WHITE,  # Color para los textos en elementos primarios
                 on_secondary=ft.colors.BLACK  # Color para textos en elementos secundarios

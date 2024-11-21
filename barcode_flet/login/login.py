@@ -25,17 +25,24 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         BarcodeFrame.__init__(self,page)
         MyReport.__init__(self)
         
+        # Crear un Container que cubra toda la página y tenga una imagen de fondo
+        self.background_container = ft.Container(
+                    content=ft.Image(
+                        width=self.page.width, 
+                        height=self.page.height,
+                        src="https://images.unsplash.com/flagged/photo-1560177776-295b9cd779de?q=80&w=2002&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                        fit=ft.ImageFit.COVER
+                        )
+                    )
         self.page.vertical_alignment = ft.MainAxisAlignment.START
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.padding = 0  # Sin padding en la página
         self.page.spacing = 0  # Sin espacio entre widgets
-        # self.page.bgcolor = ft.colors.RED
         self.page.title = "Login"  
         self.page.assets_dir = os.path.join(os.getcwd(), "assets")
         self.page.window_favicon = ft.Image(src="ulti.ico")
-        # self.page.theme_mode = ft.ThemeMode.DARK
-        # self.page.appbar = self.create_appbar()
         self.page.clean()
+        
         self.page.add(self.main_pagelet) # FOR TEST
         self.btn_menu_profile.visible = True #this to be TRUE for test 
         # self.page.on_login = self.my_login()
@@ -72,9 +79,24 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
                 username_field.value = ""
                 password_field.value = ""
                 error_message.value = ""
-                self.page.add(self.barcode_container,ft.SnackBar(ft.Text(response.json()["msg"]), open=True))
-                # self.page.add(ft.SnackBar(ft.Text(response.json()["msg"]), open=True))
+                #HERE Open SNACKBAR FOR gretting you
+                self.page.snack_bar.open = True
+                self.page.snack_bar.bgcolor = self.page.theme.color_scheme.tertiary
+                self.page.snack_bar.content = self.my_card_snackbar('Bienvenido',
+                                                                    'Ya estas en session',
+                                                                    ft.icons.VERIFIED_USER)
+                # self.page.update()  
+                self.page.add(self.main_pagelet)
             elif response.status_code == 401:
+                #HERE Open SNACKBAR FOR ERROR user or pass
+                self.page.snack_bar.open = True
+                self.page.snack_bar.icon = ft.icons.PASSWORD
+                self.page.snack_bar.bgcolor = self.page.theme.color_scheme.on_error
+                self.page.snack_bar.content = self.my_card_snackbar('Usuario o contraseña incorrecto',
+                                                                    'Vuelva a intentarlo',
+                                                                    ft.icons.SECURITY)
+                self.page.update()
+                #H---------------------------
                 error_message.value = "Usuario o contraseña incorrecto."
                 username_field.value = ""
                 password_field.value = ""
@@ -87,10 +109,15 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
 
         # Campos del formulario de login
                 
-        user_session_text = ft.Text(value='Inicio de Sesión de Usuario', 
-                                    size=18, 
-                                    color=ft.colors.BLUE_900, 
-                                    italic=True) 
+        user_session_text = ft.Text(value='Inicio Sesión de Usuario',
+                                    size=20,
+                                    color=ft.colors.WHITE,
+                                    weight=ft.FontWeight.BOLD,
+                                    font_family="Verdana",
+                                    text_align=ft.TextAlign.CENTER,
+                                    italic=True,
+                                    opacity=0.8,
+                                    max_lines=1) 
         
         error_message = ft.Text(color=self.page.theme.color_scheme.on_error)  # Texto para mensajes de error
         
@@ -116,33 +143,33 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         
                 # Definir el contenedor de la imagen
         self.login_container = ft.Container(
-            content=ft.Column(
-                controls=[user_session_text,username_field,password_field,error_message,login_button],
+            blend_mode=ft.BlendMode.MULTIPLY, 
+            content=ft.Column(controls=[user_session_text,username_field,password_field,error_message,login_button],
                 alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER
             ),
             padding=25,
-            border_radius=0,  
+            border_radius=10,  
             width=400,  # Ancho del contenedor
             height=300,
             bgcolor=ft.colors.GREY_200,
-            shadow=ft.BoxShadow(
-            spread_radius=1,        # Expande el área de la sombra
-            blur_radius=15,         # Nivel de desenfoque de la sombra
-            color=ft.colors.BLUE_300,  # Color de la sombra en RGBA para transparencia
-            offset=ft.Offset(5, 5)  # Posición de la sombra (x, y)
+            
         )
-        )
-        
+
         # Agregar un contenedor principal para centrar todo el contenido en la pantalla
         self.page.add(
-            ft.Container(
-                content=self.login_container, alignment=ft.alignment.center, expand=True))
+            ft.Stack(controls=[self.background_container,
+                                ft.Container(content=self.login_container,
+                                             padding=20,
+                                             alignment=ft.alignment.center)], 
+                     expand=True),
+                )
         
     # Función para manejar el logout (cerrar sesión)
     def logout(self, e):
         self.btn_menu_profile.visible = False
         self.page.clean() 
         self.page.session.remove(self.page.client_storage.get("username"))
-        self.page.add(ft.Container(content=self.login_container, alignment=ft.alignment.center, expand=True))
+        self.page.add(ft.Container(content=self.login_container, alignment=ft.alignment.center, 
+                                   horizontal_alignment=ft.CrossAxisAlignment.CENTER,expand=True))
         

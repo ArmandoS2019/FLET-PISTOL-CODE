@@ -3,6 +3,7 @@ import flet as ft
 import re
 import requests
 from config.config import BASE_URL  # Import BASE_URL from config.py
+from time import sleep
 
 
 class MyFloatinButton:
@@ -26,7 +27,9 @@ class MyFloatinButton:
             if not self.dlg_modal.open:
                 self.page.snack_bar.open = True
                 self.page.snack_bar.bgcolor = self.page.theme.color_scheme.on_error
-                self.page.snack_bar.content = self.my_card_snackbar('QR NO ENCONTRADO','Vuelva a Intentarlo')
+                self.page.snack_bar.content = self.my_card_snackbar('QR NO ENCONTRADO',
+                                                                    'Vuelva a Intentarlo',
+                                                                    ft.icons.GPP_BAD_OUTLINED)
                 self.page.update()              
                 
     def upload_files(self,e):
@@ -57,8 +60,9 @@ class MyFloatinButton:
         self.page.overlay.append(self.file_picker)
         
         self.my_floating_button_send_qr = ft.FloatingActionButton(
-        content=ft.Icon(name=ft.icons.CAMERA_ALT, color=ft.colors.ORANGE_700, size=40),
-        foreground_color=ft.colors.WHITE,
+        content=ft.Icon(name=ft.icons.CAMERA_ALT, 
+                        color=ft.colors.LIGHT_GREEN_ACCENT_400, size=40),
+        foreground_color=ft.colors.RED,
         bgcolor=ft.colors.BLACK,
         height=56,
         width=56,
@@ -72,7 +76,7 @@ class MyFloatinButton:
         
         return ft.Container(
                             self.my_floating_button_send_qr,
-                            border=ft.border.all(2, ft.colors.ORANGE_300),
+                            border=ft.border.all(2, ft.colors.LIGHT_GREEN_ACCENT_400),
                             border_radius=ft.border_radius.all(50),
                             padding=5,  # Agrega espacio alrededor del botón
                             ink=True  # Activa el efecto de onda al hacer clic
