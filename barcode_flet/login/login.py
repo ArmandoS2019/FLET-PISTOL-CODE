@@ -24,7 +24,6 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         MyTheme.__init__(self,page)
         BarcodeFrame.__init__(self,page)
         MyReport.__init__(self)
-        
         # Crear un Container que cubra toda la página y tenga una imagen de fondo
         self.background_container = ft.Container(
                     content=ft.Image(
@@ -42,9 +41,9 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         self.page.assets_dir = os.path.join(os.getcwd(), "assets")
         self.page.window_favicon = ft.Image(src="ulti.ico")
         self.page.clean()
-        
+               
         self.page.add(self.main_pagelet) # FOR TEST
-        self.btn_menu_profile.visible = True #this to be TRUE for test 
+        # self.btn_menu_profile.visible = False #this to be TRUE for test 
         # self.page.on_login = self.my_login()
         
     def my_login(self):
@@ -86,7 +85,13 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
                                                                     'Ya estas en session',
                                                                     ft.icons.VERIFIED_USER)
                 # self.page.update()  
+                # self.page.add(ft.Stack(controls=[self.background_container,
+                #                 ft.Container(content=self.main_pagelet,
+                #                              padding=20,
+                #                              alignment=ft.alignment.center)], 
+                #      expand=True))
                 self.page.add(self.main_pagelet)
+                
             elif response.status_code == 401:
                 #HERE Open SNACKBAR FOR ERROR user or pass
                 self.page.snack_bar.open = True
@@ -143,7 +148,6 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         
                 # Definir el contenedor de la imagen
         self.login_container = ft.Container(
-            blend_mode=ft.BlendMode.MULTIPLY, 
             content=ft.Column(controls=[user_session_text,username_field,password_field,error_message,login_button],
                 alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER
@@ -152,7 +156,7 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
             border_radius=10,  
             width=400,  # Ancho del contenedor
             height=300,
-            bgcolor=ft.colors.GREY_200,
+            bgcolor=None,
             
         )
 
@@ -170,6 +174,11 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         self.btn_menu_profile.visible = False
         self.page.clean() 
         self.page.session.remove(self.page.client_storage.get("username"))
-        self.page.add(ft.Container(content=self.login_container, alignment=ft.alignment.center, 
-                                   horizontal_alignment=ft.CrossAxisAlignment.CENTER,expand=True))
+        self.page.add(
+            ft.Stack(controls=[self.background_container,
+                                ft.Container(content=self.login_container,
+                                             padding=20,
+                                             alignment=ft.alignment.center)], 
+                     expand=True),
+                )
         

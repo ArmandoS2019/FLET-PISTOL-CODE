@@ -12,13 +12,14 @@ import os
 import requests 
 from api import router_image, router_data, router_user
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await flet_fastapi.app_manager.start()
     yield
     await flet_fastapi.app_manager.shutdown()
 
-app = FastAPI(lifespan=lifespan)
+app = flet_fastapi.FastAPI()
 
 def main(page: ft.Page):
     Login(page)
@@ -53,11 +54,10 @@ def main_user(page: ft.Page):
 app.include_router(router_image, 
                    prefix="/images", 
                    tags=["Images"]) #This routes get FROM FAST API other API folder
-
+    
 app.include_router(router_image, 
                    prefix="/read_qr", 
                    tags=["Images"]) #This routes get FROM FAST API other API folder
-
 
 app.include_router(router_data,
                    tags=["Data"]) #This routes get FROM FAST API other API folder
@@ -65,13 +65,15 @@ app.include_router(router_data,
 app.include_router(router_user,
                    tags=["Login"]) #This routes FOR register and work user login
 
-# app.mount("/",flet_fastapi.app(main_user, 
-#                             assets_dir='/assets',
-#                             web_renderer=ft.WebRenderer.CANVAS_KIT))
 
+# Genera una ruta absoluta para assets_dir
+assets_absolute_path = os.path.abspath("assets")
 
 app.mount("/",flet_fastapi.app(main, 
-                            assets_dir='/assets', 
-                            upload_dir="assets/uploads", 
+                            assets_dir=assets_absolute_path, 
+                            upload_dir=os.path.abspath("assets/uploads"), 
                             secret_key="mi_clave_secreta",
                             web_renderer=ft.WebRenderer.CANVAS_KIT))
+
+
+    

@@ -9,8 +9,8 @@ class MyModal:
         self.dlg_modal = ft.AlertDialog(
         bgcolor='#040f3d',
         modal=True,
-        title=ft.Text("Please confirm"),
-        content=ft.Text("Do you really want to delete all those files?"),
+        title=ft.Text("Por favor confirme si deseea\nrecibir este expediente", text_align=ft.TextAlign.CENTER),
+        content=ft.Text("Realmente desea recibir este expediente?"),
         actions=[self.my_card],
         actions_alignment=ft.MainAxisAlignment.CENTER)
         return self.dlg_modal

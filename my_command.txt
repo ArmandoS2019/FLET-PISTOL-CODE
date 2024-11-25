@@ -5,4 +5,5 @@ uvicorn main:app --reload #auto_change server
 uvicorn main:app --reload #auto_change server
 uvicorn main:app --port 5000 --reload #auto_change server and change port
 uvicorn main:app --host 10.0.0.54 --port 5000 --reload #auto_change server and change port AND all your INTERNET
+uvicorn main:app --host 127.0.0.1 --port 8000 --reload #auto_change server and change port AND all your INTERNET
 

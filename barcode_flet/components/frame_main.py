@@ -5,14 +5,15 @@ class BarcodeFrame:
     
     def __init__(self, page):
         self.page = page
-        self.page.bgcolor = ft.colors.RED
-
-        
+        self.page.bgcolor = ft.colors.WHITE
+         
         self.my_snack_bar = self.get_snackbar()
         self.page.snack_bar = self.my_snack_bar
-        
         self.dlg_modal = self.modal_alert_status()
-
+        # self.page.overlay.append(self.dlg_modal)
+        self.my_card = self.my_card()
+        self.data_table_persist = self.data_table()
+        
         # Definir un diccionario con los atributos comunes
         self.common_attributes = {
             "expand":True,
@@ -39,8 +40,7 @@ class BarcodeFrame:
                                           hint_text="Esperando lectura de codigo...", 
                                           on_submit=self.on_submit_modal_status)
         
-        self.my_card = self.my_card()
-        self.data_table = self.data_table()
+        
         
         self.row_barcode = ft.Row(
                             controls=[
@@ -59,7 +59,7 @@ class BarcodeFrame:
         self.table_container = ft.Container(padding=2, 
                                             expand=True,
                                             border_radius=3,  
-                                            content=self.data_table)
+                                            content=self.data_table_persist)
         
         self.main_pagelet = ft.Pagelet(
                     expand=True,

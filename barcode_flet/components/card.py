@@ -23,9 +23,9 @@ class MyCard:
                     [
                         ft.ListTile(
                             leading=ft.Icon(ft.icons.DESCRIPTION),
-                            title=ft.Text("The Enchanted Nightingale"),
+                            title=ft.Text("Aqui van los datos del expediente a recibir"),
                             subtitle=ft.Text(
-                                "Music by Julie Gable. Lyrics by Sidney Stein."
+                                "Datos del expediente a recibir."
                             ),
                         ),
                         ft.Row(

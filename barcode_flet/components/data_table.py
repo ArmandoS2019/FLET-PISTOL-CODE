@@ -87,10 +87,7 @@ class MyDataTable:
                 # Construir filas para el DataTable
                 my_rows = [
                     ft.DataRow(
-                        color={
-                            ft.ControlState.DEFAULT: ft.colors.BLUE,  # Color por defecto (negro)
-                            ft.ControlState.HOVERED: ft.colors.RED,  # Color al pasar el cursor (rojo)
-                            ft.ControlState.FOCUSED: ft.colors.YELLOW},  # Color cuando está enfocado (verde)},
+    
                         cells=[
                             
                             ft.DataCell(ft.Text(str(num))),
@@ -123,7 +120,7 @@ class MyDataTable:
         self.my_data_table = ft.DataTable(expand=True,
                                           border=ft.border.all(2, "blue"), 
                                           border_radius=10,
-                                          bgcolor=ft.colors.GREY_400,
+                                          bgcolor=ft.colors.WHITE,
                                           vertical_lines=ft.BorderSide(1, "blue"),
                                           horizontal_lines=ft.BorderSide(1, "green"),
                                           heading_row_color=ft.colors.BLACK12,
@@ -148,7 +145,8 @@ class MyDataTable:
                                                 weight=ft.FontWeight.BOLD),
                                           )
 
-        data_table_container = ft.Container(expand=True,width=1300, 
+        data_table_container = ft.Container(expand=True,
+                                            width=1300, 
                                             alignment=ft.alignment.center,
                                             border_radius=ft.border_radius.only(top_left=10,top_right=10),
                                             
@@ -160,6 +158,6 @@ class MyDataTable:
                                             )
         return ft.Container(alignment=ft.alignment.center,
                             bgcolor=ft.colors.GREY_200,
-                            content=ft.Column(controls=[ft.Text(value=my_column),data_table_container],
+                            content=ft.Column(controls=[data_table_container],
                                               alignment=ft.alignment.center))
     

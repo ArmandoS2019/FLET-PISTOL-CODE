@@ -34,61 +34,40 @@ class MyComponents(ft.Page):
         return True
        
     def btn_cupertino_status(self):
-        
-        def button_clicked(e):
-            t.value = f"Your favorite color is:  {cg.value}"
-            self.page.update()
-
-        # label_style=ft.TextStyle(
-        #                         color=ft.colors.GREEN,
-        #                         size=14,
-        #                         weight=ft.FontWeight.W_600
-        #                     )
+    
         my_radio_group = ft.CupertinoSegmentedButton(
-            selected_index=1,
-            unselected_color=ft.colors.WHITE,
-            selected_color=ft.colors.BLUE_900,
-            border_color=ft.colors.BLUE,
-            on_change=lambda e: print(f"selected_index: {e.data}"),
-            controls=[
-                ft.Container(
-                    padding=ft.padding.symmetric(0, 30),
-                    content=ft.Text("Recibir",  
-                                    size=18,
-                                    color=ft.colors.BLUE_GREY_100,
-                                    font_family="Open Sans",
-                                    text_align="center"),
-                ),
-                ft.Container(
-                    padding=ft.padding.symmetric(0, 10),
-                    content=ft.Text("Despachar", 
-                                    size=18,
-                                    color=ft.colors.BLUE_GREY_100,
-                                    font_family="Open Sans",
-                                    text_align="center"),
-                ),
-            ],
-        )
-        # self.btn_cupertino_status = ft.CupertinoNavigationBar(
-        # bgcolor=self.page.theme.color_scheme.primary,
-        # inactive_color=self.page.theme.color_scheme.on_error,
-        # active_color=self.page.theme.color_scheme.secondary,
-        # on_change=lambda e: print("Selected tab:", e.control.selected_index),
-        #     destinations=[
-        #         ft.NavigationBarDestination(icon=ft.icons.MOVE_TO_INBOX,
-        #                                     selected_icon=ft.icons.MOVE_TO_INBOX,
-        #                                     selected_icon_content=ft.Icon(ft.icons.CHECK, 
-        #                                                                   color=self.page.theme.color_scheme.on_tertiary),
-        #                                     icon_content=ft.Text("ESTAS DESPACHANDO", size=18, weight="bold"),
-        #                                     label="RECIBIR"),
-        #         ft.NavigationBarDestination(icon=ft.icons.ARROW_FORWARD, 
-        #                                     selected_icon_content=ft.Icon(ft.icons.CHECK, 
-        #                                                                   color=self.page.theme.color_scheme.on_tertiary),
-        #                                     icon_content=ft.Text("ESTAS RECIBIENDO", size=18, weight="bold"),
-        #                                     label="DESPACHAR"),
-        #     ] q
-        # )
-        return ft.Container(content=my_radio_group, alignment=ft.alignment.center)  
+                padding=10,
+                width=9000,
+                selected_index=1,
+                click_color=self.page.theme.color_scheme.on_tertiary,
+                unselected_color=ft.colors.WHITE,
+                selected_color=ft.colors.BLUE_900,
+                border_color=self.page.theme.color_scheme.on_tertiary,
+                on_change=lambda e: print(f"selected_index: {e.data}"),
+                controls=[
+                    ft.Container(
+                        padding=ft.padding.symmetric(0, 30),
+                        content=ft.Text("Recibir",  
+                                        size=18,
+                                        color=self.page.theme.color_scheme.on_tertiary,
+                                        font_family="Open Sans",
+                                        text_align="center"),
+                    ),
+                    ft.Container(
+                        padding=ft.padding.symmetric(0, 10),
+                        content=ft.Text("Despachar", 
+                                        size=18,
+                                        color=self.page.theme.color_scheme.on_tertiary,
+                                        font_family="Open Sans",
+                                        text_align="center"),
+                    ),
+                ],
+            )
+        
+        return ft.Container(content=my_radio_group, 
+                            border_radius=12,
+                            bgcolor=self.page.theme.color_scheme.on_tertiary_container,
+                            alignment=ft.alignment.center)  
     
     def on_submit_modal_status(self, e):
         self.dlg_modal = self.modal_alert_status()
@@ -107,6 +86,18 @@ class MyComponents(ft.Page):
         self.page.update()
         return True
     
+    
+    def show_spinner(self):
+        my_spinner = ft.ProgressRing()
+        self.page.overlay.append(my_spinner)
+        self.page.update()
+        return my_spinner
+
+    def hide_spinner(self, spinner):
+        if spinner in self.page.overlay:
+            self.page.overlay.remove(spinner)
+        self.page.update()
+    
     def changed_theme(self, e):
         self.page.theme_mode = ft.ThemeMode.DARK if self.page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
         # Actualizar el ícono dependiendo del tema actual
@@ -116,6 +107,7 @@ class MyComponents(ft.Page):
         return True
     
     def handle_close(self,e):
+        self.dlg_modal.open = False
         self.page.close(self.dlg_modal)
         self.page.update()
         self.barcode_input.focus()

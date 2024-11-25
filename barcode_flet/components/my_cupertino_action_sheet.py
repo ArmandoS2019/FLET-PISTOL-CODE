@@ -7,33 +7,25 @@ class MyCupertinoActionSheet:
         
     def get_cupertino_action_sheet(self):
 
+        def handle_click(e):
+            self.page.close(bottom_sheet)
+                
         action_sheet = ft.CupertinoActionSheet(
-            
-            title=ft.Row([ft.Text("DOCUMENTOS RECIBIDOS")], 
-                         alignment=ft.MainAxisAlignment.CENTER),
-            message=ft.Row([ft.Text("Aqui tienes un historico de tus documentos recibidos")], alignment=ft.MainAxisAlignment.CENTER),
+            title=ft.Row(alignment=ft.MainAxisAlignment.CENTER, 
+                         controls=[ft.Text("DOCUMENTOS RECIBIDOS", 
+                                  color=self.page.theme.color_scheme.on_tertiary)]),
+            message=ft.Row(alignment=ft.MainAxisAlignment.CENTER,
+                           controls=[ft.Text("Historico de tus documentos recibidos", 
+                                  color=self.page.theme.color_scheme.on_tertiary)]),
             cancel=ft.CupertinoActionSheetAction(
-                content=ft.Text("Cancel"),
-                on_click='handle_click',
+                content=ft.Text("Cerrar vista", 
+                                  color=self.page.theme.color_scheme.on_tertiary),
+                on_click=handle_click,
             ),
-            actions=[
-                ft.CupertinoActionSheetAction(
-                    content=ft.Text("Default Action"),
-                    is_default_action=True,
-                    on_click='handle_click',
-                ),
-                ft.CupertinoActionSheetAction(
-                    content=ft.Text("Normal Action"),
-                    on_click='handle_click',
-                ),
-                ft.CupertinoActionSheetAction(
-                    content=ft.Text("Destructive Action"),
-                    is_destructive_action=True,
-                    on_click='handle_click',
-                ),
-            ],
+            actions=[self.data_table()],
+
         )
 
         bottom_sheet = ft.CupertinoBottomSheet(action_sheet)
-    
+
         return bottom_sheet
