@@ -88,10 +88,21 @@ class MyComponents(ft.Page):
     
     
     def show_spinner(self):
-        my_spinner = ft.ProgressRing()
-        self.page.overlay.append(my_spinner)
-        self.page.update()
-        return my_spinner
+        # Create a centered container for the spinner
+        spinner_container = ft.Container(
+            content=ft.CupertinoActivityIndicator(
+            radius=50,
+            color=self.page.theme.color_scheme.on_tertiary,
+            animating=True ),
+            alignment=ft.alignment.center,  # Center the spinner in the container
+            width=self.page.width,         # Match the width of the screen
+            height=self.page.height,       # Match the height of the screen
+        )
+
+        # Add the spinner container to the overlay
+        self.page.overlay.append(spinner_container)
+        self.page.update()  # Update the page to show the spinner
+        return spinner_container
 
     def hide_spinner(self, spinner):
         if spinner in self.page.overlay:

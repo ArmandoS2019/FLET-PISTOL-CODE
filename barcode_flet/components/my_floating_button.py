@@ -19,28 +19,25 @@ class MyFloatinButton:
             response = requests.post(f'{BASE_URL}/read_qr/read_qr/', files=files)
         # Imprimir la respuesta
         if response.status_code == 200:
-            spinner = self.show_spinner()
-
-
+            # self.spinner = self.show_spinner()
             self.dlg_modal.open = True
-            
-            self.hide_spinner(spinner)
-            # self.page.update()
-            
-    
-            # self.dlg_modal.open = True
-            # self.page.update()
+            # sleep(0.9)
+            # self.hide_spinner( self.spinner)
+            self.hide_spinner(self.spinner)
+
             print("Respuesta de la API:", response.json())
         else:               
+            # self.hide_spinner(self.spinner)              
             if not self.dlg_modal.open:
                 self.page.snack_bar.open = True
                 self.page.snack_bar.bgcolor = self.page.theme.color_scheme.on_error
                 self.page.snack_bar.content = self.my_card_snackbar('QR NO ENCONTRADO',
                                                                     'Vuelva a Intentarlo',
                                                                     ft.icons.GPP_BAD_OUTLINED)
-                self.page.update()              
+        self.hide_spinner(self.spinner)              
                 
     def upload_files(self,e):
+        self.spinner = self.show_spinner()
         upload_list = []
         if self.file_picker.result != None and self.file_picker.result.files != None:
             for f in self.file_picker.result.files:
@@ -57,9 +54,10 @@ class MyFloatinButton:
         self.dlg_modal = self.modal_alert_status()
         self.page.overlay.append(self.dlg_modal)
         self.page.update()
-                   
+        
         self.file_picker = ft.FilePicker(on_result=self.upload_files,
                                          on_upload=self.read_barcode)
+       
 
         self.page.overlay.append(self.file_picker)
         
