@@ -13,7 +13,7 @@ class BarcodeFrame:
         # self.page.overlay.append(self.dlg_modal)
         self.my_card = self.my_card()
         self.data_table_persist = self.data_table()
-        
+    
         # Definir un diccionario con los atributos comunes
         self.common_attributes = {
             "expand":True,

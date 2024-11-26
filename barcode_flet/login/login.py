@@ -18,7 +18,7 @@ from config.config import BASE_URL  # Import BASE_URL from config.py
 import requests 
 
 
-class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, MySnackBar,MyModal,MyCard,MyFloatinButton,BottomAppBar,MyNavigationDrawer, MyCupertinoActionSheet):
+class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport, MyDataTable, MySnackBar,MyModal,MyCard,MyFloatinButton,BottomAppBar,MyNavigationDrawer, MyCupertinoActionSheet):
     
     def __init__(self, page):
         MyTheme.__init__(self,page)
@@ -41,9 +41,10 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport,MyDataTable, M
         self.page.assets_dir = os.path.join(os.getcwd(), "assets")
         self.page.window_favicon = ft.Image(src="ulti.ico")
         self.page.clean()
-               
+        
+           
         self.page.add(self.main_pagelet) # FOR TEST
-        # self.btn_menu_profile.visible = False #this to be TRUE for test 
+        self.btn_menu_profile.visible = False #this to be TRUE for test 
         # self.page.on_login = self.my_login()
         
     def my_login(self):

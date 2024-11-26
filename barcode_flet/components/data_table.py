@@ -8,7 +8,21 @@ class MyDataTable:
 
     def __init__(self, page):
         self.page = page
-      
+    
+    def submit_pdf_report(self,e):
+        try:
+            # Realiza la solicitud GET
+            response = requests.get(f"{BASE_URL}/reports/view-pdf")
+            print(response)
+            if response.status_code == 200:
+                # results = response.json()
+                # print(results)
+                self.page.launch_url(f"{BASE_URL}/reports/view-pdf")
+            else:
+                print(f"Error al obtener datos: {response.status_code}")
+        except requests.RequestException as e:
+            print(f"Error de solicitud: {e}")
+            
     def verify_check_true_datatable(self, e):
         # Recopilar datos seleccionados
         selected_data = [
@@ -126,7 +140,7 @@ class MyDataTable:
                                           heading_row_color=ft.colors.BLACK12,
                                           sort_column_index=0,
                                           sort_ascending=True,
-                                          data_row_color={ft.ControlState.HOVERED: ft.colors.YELLOW_200},
+                                          data_row_color={ft.ControlState.HOVERED: ft.colors.LIGHT_GREEN_ACCENT_100},
                                           show_checkbox_column=True,
                                           divider_thickness=0,
                                           heading_row_height=30,
@@ -157,7 +171,7 @@ class MyDataTable:
                                                           scroll=ft.ScrollMode.ALWAYS)
                                             )
         return ft.Container(alignment=ft.alignment.center,
-                            bgcolor=ft.colors.GREY_200,
+                            bgcolor=ft.colors.GREY_300,
                             content=ft.Column(controls=[data_table_container],
                                               alignment=ft.alignment.center))
     

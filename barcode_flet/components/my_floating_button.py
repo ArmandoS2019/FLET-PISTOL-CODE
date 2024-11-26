@@ -12,6 +12,7 @@ class MyFloatinButton:
         self.page = page
     
     def read_barcode(self,e):
+        
         image_path = f"assets/uploads/{e.file_name}"
         # Enviar la imagen como archivo en una solicitud POST
         with open(image_path, "rb") as image_file:
@@ -19,13 +20,13 @@ class MyFloatinButton:
             response = requests.post(f'{BASE_URL}/read_qr/read_qr/', files=files)
         # Imprimir la respuesta
         if response.status_code == 200:
-            # self.spinner = self.show_spinner()
-            self.dlg_modal.open = True
-            # sleep(0.9)
-            # self.hide_spinner( self.spinner)
-            self.hide_spinner(self.spinner)
-
-            print("Respuesta de la API:", response.json())
+            if not self.dlg_modal.open:
+                # self.spinner = self.show_spinner()
+                self.dlg_modal.open = True
+                # sleep(0.9)
+                # self.hide_spinner( self.spinner)
+                self.hide_spinner(self.spinner)
+                print("Respuesta de la API:", response.json())
         else:               
             # self.hide_spinner(self.spinner)              
             if not self.dlg_modal.open:

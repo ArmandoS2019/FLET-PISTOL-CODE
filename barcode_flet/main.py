@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 from fastapi import HTTPException
 import os
 import requests 
-from api import router_image, router_data, router_user
+from api import router_image, router_data, router_user, router_reports
 
 
 @asynccontextmanager
@@ -54,10 +54,15 @@ def main_user(page: ft.Page):
 app.include_router(router_image, 
                    prefix="/images", 
                    tags=["Images"]) #This routes get FROM FAST API other API folder
+
     
 app.include_router(router_image, 
                    prefix="/read_qr", 
                    tags=["Images"]) #This routes get FROM FAST API other API folder
+
+app.include_router(router_reports, 
+                   prefix="/reports", 
+                   tags=["Reports"]) #This routes get FROM FAST API other API folder
 
 app.include_router(router_data,
                    tags=["Data"]) #This routes get FROM FAST API other API folder

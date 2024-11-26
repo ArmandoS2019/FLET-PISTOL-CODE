@@ -1,5 +1,8 @@
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
+from fastapi.responses import Response
+from reportlab.pdfgen import canvas
+
 import os
 from fastapi import FastAPI, File, UploadFile, HTTPException,Request
 from fastapi.responses import JSONResponse
@@ -12,6 +15,7 @@ import cv2
 import numpy as np
 
 router_image = APIRouter()
+
 
 # Variable global para almacenar el último frame capturado
 latest_frame = None
@@ -174,4 +178,4 @@ async def process_image(request: Request):
         print(f"Error procesando la imagen: {e}")
         return JSONResponse({"error": str(e)}, status_code=500)
     
-    
+

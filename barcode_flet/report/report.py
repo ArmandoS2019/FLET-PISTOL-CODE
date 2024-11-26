@@ -3,7 +3,6 @@ from datetime import datetime
 import flet as ft
 import io
 import base64
-from fastapi.responses import JSONResponse
 
 
 class MyReport:

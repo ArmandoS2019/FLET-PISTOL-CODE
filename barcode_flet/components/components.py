@@ -92,7 +92,7 @@ class MyComponents(ft.Page):
         spinner_container = ft.Container(
             content=ft.CupertinoActivityIndicator(
             radius=50,
-            color=self.page.theme.color_scheme.on_tertiary,
+            color=ft.colors.LIGHT_GREEN_ACCENT_400,
             animating=True ),
             alignment=ft.alignment.center,  # Center the spinner in the container
             width=self.page.width,         # Match the width of the screen
