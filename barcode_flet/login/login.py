@@ -33,6 +33,8 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport, MyDataTable, 
                         fit=ft.ImageFit.COVER
                         )
                     )
+        
+        
         self.page.vertical_alignment = ft.MainAxisAlignment.START
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.padding = 0  # Sin padding en la página
@@ -41,8 +43,7 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport, MyDataTable, 
         self.page.assets_dir = os.path.join(os.getcwd(), "assets")
         self.page.window_favicon = ft.Image(src="ulti.ico")
         self.page.clean()
-        
-           
+                   
         # self.page.add(self.main_pagelet) # FOR TEST
         self.btn_menu_profile.visible = True #this to be TRUE for test 
         self.page.on_login = self.my_login()
@@ -160,13 +161,22 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport, MyDataTable, 
             bgcolor=None,
             
         )
-
+        
+                     
         # Agregar un contenedor principal para centrar todo el contenido en la pantalla
         self.page.add(
-            ft.Stack(controls=[self.background_container,
+            ft.Stack(controls=[
+                                self.background_container,
                                 ft.Container(content=self.login_container,
                                              padding=20,
-                                             alignment=ft.alignment.center)], 
+                                             alignment=ft.alignment.center),
+                                ft.Container(content=ft.Text(value='Ulti-Tracking',
+                                                             size=50, 
+                                                             italic=True,
+                                                             text_align=ft.TextAlign.CENTER),
+                                             padding=100)
+                                ], 
+                     alignment=ft.alignment.top_center,
                      expand=True),
                 )
         
