@@ -29,7 +29,7 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport, MyDataTable, 
                     content=ft.Image(
                         width=self.page.width, 
                         height=self.page.height,
-                        src="https://images.unsplash.com/flagged/photo-1560177776-295b9cd779de?q=80&w=2002&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                        src="https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                         fit=ft.ImageFit.COVER
                         )
                     )
@@ -43,9 +43,9 @@ class Login(MyTheme, MyAppBar,MyComponents,BarcodeFrame, MyReport, MyDataTable, 
         self.page.clean()
         
            
-        self.page.add(self.main_pagelet) # FOR TEST
-        self.btn_menu_profile.visible = False #this to be TRUE for test 
-        # self.page.on_login = self.my_login()
+        # self.page.add(self.main_pagelet) # FOR TEST
+        self.btn_menu_profile.visible = True #this to be TRUE for test 
+        self.page.on_login = self.my_login()
         
     def my_login(self):
         self.btn_common_attributes = {

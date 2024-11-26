@@ -1,8 +1,10 @@
 import flet as ft
 from db.my_mongodb import collection_doc_data
+from pymongo import ASCENDING, DESCENDING
+
 import requests
 from config.config import BASE_URL  # Import BASE_URL from config.py
-
+from datetime import datetime, timedelta
 
 class MyDataTable:
 
@@ -61,19 +63,26 @@ class MyDataTable:
         return True
 
     def insert_data_to_montodb(self):
-        
+        utc_now = datetime.utcnow().strftime("%d/%m/%Y")
+        utc_time = datetime.utcnow().strftime("%H:%M:%S")
         my_data = {'user_id':655,
                    'status_code':'Recibido en el archivo insp.',
                    'state':'DESPACHADO',
-                   'date':'02-23-2024',
-                   'updated_date':'09-03-2024'}
+                   'date':f'{utc_now}',
+                   'time':f'{utc_time}',
+                   'created_date':f'{utc_now}'}
         
         result = collection_doc_data.insert_one(my_data).inserted_id 
         self.update_datatable()
         return result    
     
     def update_datatable(self):
-        resultados = collection_doc_data.find().limit(50)
+        # Current date in desired format
+        current_date = datetime.now().strftime("%d/%m/%Y")
+        # Default filter (match current date)
+        base_filter = {"date": str(current_date)}
+        
+        results = collection_doc_data.find(base_filter).sort("date", -1)
         my_rows = [ft.DataRow(
             cells=[
                 ft.DataCell(ft.Text(str(num))),
@@ -81,8 +90,9 @@ class MyDataTable:
                 ft.DataCell(ft.Text(documento.get("status_code", ""))),
                 ft.DataCell(ft.Text(documento.get("state", ""))),
                 ft.DataCell(ft.Text(documento.get("date", ""))),
-                ft.DataCell(ft.Text(documento.get("updated_date", ""))),],
-            on_select_changed=self.on_selection_change) for num, documento in enumerate(resultados, start=1) ]
+                ft.DataCell(ft.Text(documento.get("time", ""))),
+                ft.DataCell(ft.Text(documento.get("created_date", ""))),],
+            on_select_changed=self.on_selection_change) for num, documento in enumerate(results, start=1) ]
         
         # # Obtener los datos actualizados de MongoDB
         nuevos_datos = my_rows
@@ -92,43 +102,43 @@ class MyDataTable:
         self.page.update()
         return True
        
-    def get_data_from_api(self):
+    def get_data_from_api(self, my_filter: dict = None):
         try:
-            # Realiza la solicitud GET
-            response = requests.get(f"{BASE_URL}/get_data/")
-            if response.status_code == 200:
-                results = response.json()
-                # Construir filas para el DataTable
-                my_rows = [
-                    ft.DataRow(
-    
-                        cells=[
-                            
-                            ft.DataCell(ft.Text(str(num))),
-                            ft.DataCell(ft.Text(item["user_id"])),
-                            ft.DataCell(ft.Text(item["status_code"])),
-                            ft.DataCell(ft.Text(item["state"])),
-                            ft.DataCell(ft.Text(item["date"])),
-                            ft.DataCell(ft.Text(item["updated_date"])),
-                        ],
-                        on_select_changed=self.on_selection_change
-                    ) for num, item in enumerate(results['items'], start=1)
-                ]
-                return my_rows
-            else:
-                print(f"Error al obtener datos: {response.status_code}")
-        except requests.RequestException as e:
+            results = collection_doc_data.find(my_filter).sort("date", DESCENDING)
+              
+            my_rows = [
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(ft.Text(str(num))),
+                        ft.DataCell(ft.Text(item["user_id"])),
+                        ft.DataCell(ft.Text(item["status_code"])),
+                        ft.DataCell(ft.Text(item["state"])),
+                        ft.DataCell(ft.Text(item["date"])),
+                        ft.DataCell(ft.Text(item["time"])),
+                        ft.DataCell(ft.Text(item["created_date"])),
+                    ],
+                    on_select_changed=self.on_selection_change
+                ) for num, item in enumerate(results, start=1)
+            ]
+            return my_rows
+        except Exception as e:
             print(f"Error de solicitud: {e}")
-    
+        
     def data_table(self):
-        my_rows = self.get_data_from_api()
+        # Current date in desired format
+        current_date = datetime.now().strftime("%d/%m/%Y")
+        # Default filter (match current date)
+        base_filter = {"date": str(current_date)}
+        my_rows = self.get_data_from_api(base_filter)
+    
         my_column = [
                     ft.DataColumn(ft.Text("#")),
                     ft.DataColumn(ft.Text("Column 1"),on_sort=lambda e: print(f"{e.column_index}, {e.ascending}")),
                     ft.DataColumn(ft.Text("Column 2")),
                     ft.DataColumn(ft.Text("Column 3")),
                     ft.DataColumn(ft.Text("Column 4")),
-                    ft.DataColumn(ft.Text("Column 5"))
+                    ft.DataColumn(ft.Text("Column 5")),
+                    ft.DataColumn(ft.Text("Column 6"))
                     ]
         # Crear la tabla de datos (DataTable)
         self.my_data_table = ft.DataTable(expand=True,
@@ -158,6 +168,51 @@ class MyDataTable:
                                                 size=16,
                                                 weight=ft.FontWeight.BOLD),
                                           )
+
+        data_table_container = ft.Container(expand=True,
+                                            width=1300, 
+                                            alignment=ft.alignment.center,
+                                            border_radius=ft.border_radius.only(top_left=10,top_right=10),
+                                            
+                                            content=ft.Row(controls=[
+                                                ft.Column(controls=[self.my_data_table], 
+                                                          auto_scroll=False, 
+                                                          scroll=ft.ScrollMode.ALWAYS)],
+                                                          scroll=ft.ScrollMode.ALWAYS)
+                                            )
+        return ft.Container(alignment=ft.alignment.center,
+                            bgcolor=ft.colors.GREY_300,
+                            content=ft.Column(controls=[data_table_container],
+                                              alignment=ft.alignment.center))
+    
+    def data_table_history(self):
+        my_rows = self.get_data_from_api()
+        my_column = [
+                    ft.DataColumn(ft.Text("#")),
+                    ft.DataColumn(ft.Text("Column 1"),on_sort=lambda e: print(f"{e.column_index}, {e.ascending}")),
+                    ft.DataColumn(ft.Text("Column 2")),
+                    ft.DataColumn(ft.Text("Column 3")),
+                    ft.DataColumn(ft.Text("Column 4")),
+                    ft.DataColumn(ft.Text("Column 5")),
+                    ft.DataColumn(ft.Text("Column 6"))
+                    ]
+        # Crear la tabla de datos (DataTable)
+        self.my_data_table = ft.DataTable(expand=True,
+                                          border=ft.border.all(2, "blue"), 
+                                          border_radius=10,
+                                          bgcolor=self.page.theme.color_scheme.on_tertiary_container,
+                                          vertical_lines=ft.BorderSide(1, "blue"),
+                                          horizontal_lines=ft.BorderSide(1, "green"),
+                                          heading_row_color=ft.colors.BLACK12,
+                                          sort_column_index=0,
+                                          sort_ascending=True,
+                                          data_row_color={ft.ControlState.HOVERED: ft.colors.LIGHT_GREEN_900},
+                                          show_checkbox_column=True,
+                                          divider_thickness=0,
+                                          heading_row_height=30,
+                                          data_row_max_height=30,
+                                          columns=my_column,
+                                          rows=my_rows)
 
         data_table_container = ft.Container(expand=True,
                                             width=1300, 

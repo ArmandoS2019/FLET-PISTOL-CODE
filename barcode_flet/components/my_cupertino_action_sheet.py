@@ -22,7 +22,7 @@ class MyCupertinoActionSheet:
                                   color=self.page.theme.color_scheme.on_tertiary),
                 on_click=handle_click,
             ),
-            actions=[self.data_table()],
+            actions=[self.data_table_history()],
 
         )
 

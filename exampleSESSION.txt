@@ -1,3 +1,33 @@
+
+# try:
+        #     # Realiza la solicitud GET
+        #     response = requests.get(f"{BASE_URL}/get_data/")
+        #     if response.status_code == 200:
+        #         results = response.json()
+        #         # Construir filas para el DataTable
+        #         my_rows = [
+        #             ft.DataRow(
+    
+        #                 cells=[
+                            
+        #                     ft.DataCell(ft.Text(str(num))),
+        #                     ft.DataCell(ft.Text(item["user_id"])),
+        #                     ft.DataCell(ft.Text(item["status_code"])),
+        #                     ft.DataCell(ft.Text(item["state"])),
+        #                     ft.DataCell(ft.Text(item["date"])),
+        #                     ft.DataCell(ft.Text(item["updated_date"])),
+        #                 ],
+        #                 on_select_changed=self.on_selection_change
+        #             ) for num, item in enumerate(results['items'], start=1)
+        #         ]
+        #         return my_rows
+        #     else:
+        #         print(f"Error al obtener datos: {response.status_code}")
+        # except requests.RequestException as e:
+        #     print(f"Error de solicitud: {e}")
+    
+
+
 import flet as ft
 
 # Función para manejar el inicio de sesión

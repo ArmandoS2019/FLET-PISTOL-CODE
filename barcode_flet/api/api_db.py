@@ -30,7 +30,7 @@ class ItemModel(BaseModel):
 async def get_data():
     try:
         # Obtener documentos de la colección con un límite de 50
-        items = collection_doc_data.find().limit(50)
+        items = collection_doc_data.find()
         
         # Convertir cada documento para que el ObjectId sea serializable
         serialized_items = [item_serializer(item) for item in items]
